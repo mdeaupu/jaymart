@@ -1,19 +1,15 @@
 <?php
 
-use App\Livewire\Dashboard;
-use App\Livewire\Produk;
-use App\Livewire\Stok;
-use App\Livewire\Transaksi;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::view('/', 'welcome');
 
-Route::get('/dashboard', Dashboard::class);
+Route::view('dashboard', 'dashboard')
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
-Route::get('/produk', Produk::class);
+Route::view('profile', 'profile')
+    ->middleware(['auth'])
+    ->name('profile');
 
-Route::get('/transaksi', Transaksi::class);
-
-Route::get('/stok', Stok::class);
+require __DIR__.'/auth.php';
