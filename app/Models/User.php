@@ -23,7 +23,13 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'branch_id'
     ];
+
+    public function branch()
+    {
+        return $this->belongsTo(Branches::class); //
+    }
 
     /**
      * The attributes that should be hidden for serialization.

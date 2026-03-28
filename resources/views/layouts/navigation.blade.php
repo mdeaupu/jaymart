@@ -36,12 +36,13 @@ new class extends Component {
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link href="">
+                    <x-nav-link :href="auth()->user()->hasRole('owner') ? route('owner.report.main') : route('report.main')" :active="auth()->user()->hasRole('owner') ? request()->routeIs('owner.report.main') : request()->routeIs('report.main')" wire:navigate>
                         {{ __('Report') }}
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link href="">
+                    <x-nav-link :href="auth()->user()->hasRole('owner') ? route('owner.users') : '#' "
+                        :active="request()->routeIs('owner.users')" wire:navigate>
                         {{ __('User Management') }}
                     </x-nav-link>
                 </div>

@@ -2,7 +2,6 @@
 
 namespace App\Livewire;
 
-use App\Models\Transactions;
 use Livewire\Component;
 
 class OwnerDashboard extends Component
