@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -15,13 +14,23 @@ return new class extends Migration
             $table->id();
             $table->foreignId('branch_id')->constrained();
             $table->foreignId('product_id')->constrained();
-            $table->foreignId('user_id')->constrained();
+
+            $table->foreignId('user_id')
+                ->nullable()
+                ->constrained('users')
+                ->onDelete('set null');
+
             $table->integer('old_quantity');
             $table->integer('new_quantity');
             $table->integer('adjustment_amount');
             $table->string('reason');
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
-            $table->foreignId('approved_by')->nullable()->constrained('users'); 
+
+            $table->foreignId('approved_by')
+                ->nullable()
+                ->constrained('users')
+                ->onDelete('set null');
+
             $table->timestamps();
         });
     }
