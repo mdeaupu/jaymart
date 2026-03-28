@@ -21,6 +21,14 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        Schema::table('users', function (Blueprint $table) {
+            $table->foreignId('branch_id')
+            ->nullable()
+            ->after('id')
+            ->constrained('branches')
+            ->onDelete('set null');
+        });
+
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
             $table->string('token');
