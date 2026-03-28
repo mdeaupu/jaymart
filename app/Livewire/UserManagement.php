@@ -102,7 +102,16 @@ class UserManagement extends Component
     public function delete()
     {
         if ($this->userId) {
-            User::find($this->userId)->delete();
+            $user = User::find($this->userId);
+
+            if ($user->id === auth()->id()) {
+                session()->flash('error', 'Anda tidak dapat menghapus akun Anda sendiri.');
+                $this->confirmingUserDeletion = false;
+                return;
+            }
+
+            $user->delete();
+            $this->userId = null;
             $this->confirmingUserDeletion = false;
             session()->flash('message', 'User Berhasil Dihapus.');
         }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\BranchManagement;
 use App\Livewire\OwnerDashboard;
 use App\Livewire\UserManagement;
 use Illuminate\Support\Facades\Route;
@@ -22,6 +23,10 @@ Route::middleware(['auth', 'verified', 'role:owner'])->group(function () {
 
     Route::middleware(['auth', 'role:owner'])->group(function () {
         Route::get('/owner/users', UserManagement::class)->name('owner.users');
+    });
+
+    Route::middleware(['auth', 'role:owner'])->group(function () {
+        Route::get('/owner/branches', BranchManagement::class)->name('branches.index');
     });
 
     Route::get('/profile/owner', function () {
