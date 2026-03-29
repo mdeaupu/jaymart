@@ -1,6 +1,9 @@
 <?php
 
 use App\Livewire\Dashboard\OwnerDashboard;
+use App\Livewire\Inventory\StockAdjustmentIndex;
+use App\Livewire\Inventory\StockAudit;
+use App\Livewire\Inventory\StockMonitor;
 use App\Livewire\Owner\BranchManagement;
 use App\Livewire\Owner\MainTransactionReport;
 use App\Livewire\Owner\UserManagement;
@@ -27,6 +30,10 @@ Route::middleware(['auth', 'verified', 'role:owner'])->group(function () {
     Route::middleware(['auth', 'role:owner'])->group(function () {
         Route::get('/owner/branches', BranchManagement::class)->name('branches.index');
     });
+
+    Route::get('/owner/monitoring', StockMonitor::class)->name('owner.monitoring');
+    Route::get('/owner/audit', StockAudit::class)->name('owner.audit');
+    Route::get('/owner/adjustments', StockAdjustmentIndex::class)->name('owner.adjustments');
 
     Route::get('/profile/owner', function () {
         return view('profile');
