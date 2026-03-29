@@ -1,8 +1,9 @@
 <?php
 
-use App\Livewire\BranchManagement;
-use App\Livewire\OwnerDashboard;
-use App\Livewire\UserManagement;
+use App\Livewire\Dashboard\OwnerDashboard;
+use App\Livewire\Owner\BranchManagement;
+use App\Livewire\Owner\MainTransactionReport;
+use App\Livewire\Owner\UserManagement;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome');
@@ -15,11 +16,9 @@ Route::get('dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['auth', 'verified', 'role:owner'])->group(function () {
-    Route::get('/dashboard/owner', OwnerDashboard::class)
-        ->name('owner.dashboard');
+    Route::get('/dashboard/owner', OwnerDashboard::class)->name('owner.dashboard');
 
-    Route::get('/report/owner', \App\Livewire\Report\MainTransactionReport::class)
-        ->name('owner.report.main');
+    Route::get('/report/owner', MainTransactionReport::class)->name('owner.report.main');
 
     Route::middleware(['auth', 'role:owner'])->group(function () {
         Route::get('/owner/users', UserManagement::class)->name('owner.users');

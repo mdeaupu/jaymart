@@ -1,5 +1,5 @@
 <?php
-namespace App\Livewire;
+namespace App\Livewire\Owner;
 
 use App\Models\Branches;
 use Livewire\Component;
@@ -15,7 +15,7 @@ class BranchManagement extends Component
 
     public function render()
     {
-        return view('livewire.branch-management', [
+        return view('livewire.owner.branch-management', [
             'branches' => Branches::latest()->paginate(5)
         ])->layout('layouts.app');
     }

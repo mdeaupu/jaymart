@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Owner;
 
 use App\Models\Branches;
 use Livewire\Component;
@@ -26,7 +26,7 @@ class UserManagement extends Component
 
     public function render()
     {
-        return view('livewire.user-management', [
+        return view('livewire.owner.user-management', [
             // Ambil data di sini agar tidak pernah NULL saat di-render ulang
             'users' => User::with(['roles', 'branch'])->latest()->paginate(10),
             'branches' => Branches::all() ?? [],
