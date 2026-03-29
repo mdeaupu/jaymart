@@ -1,8 +1,12 @@
 <?php
 
-use App\Livewire\BranchManagement;
-use App\Livewire\OwnerDashboard;
-use App\Livewire\UserManagement;
+use App\Livewire\Dashboard\OwnerDashboard;
+use App\Livewire\Inventory\StockAdjustmentIndex;
+use App\Livewire\Inventory\StockAudit;
+use App\Livewire\Inventory\StockMonitor;
+use App\Livewire\Owner\BranchManagement;
+use App\Livewire\Owner\MainTransactionReport;
+use App\Livewire\Owner\UserManagement;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome');
@@ -15,11 +19,9 @@ Route::get('dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['auth', 'verified', 'role:owner'])->group(function () {
-    Route::get('/dashboard/owner', OwnerDashboard::class)
-        ->name('owner.dashboard');
+    Route::get('/dashboard/owner', OwnerDashboard::class)->name('owner.dashboard');
 
-    Route::get('/report/owner', \App\Livewire\Report\MainTransactionReport::class)
-        ->name('owner.report.main');
+    Route::get('/report/owner', MainTransactionReport::class)->name('owner.report.main');
 
     Route::middleware(['auth', 'role:owner'])->group(function () {
         Route::get('/owner/users', UserManagement::class)->name('owner.users');
@@ -28,6 +30,10 @@ Route::middleware(['auth', 'verified', 'role:owner'])->group(function () {
     Route::middleware(['auth', 'role:owner'])->group(function () {
         Route::get('/owner/branches', BranchManagement::class)->name('branches.index');
     });
+
+    Route::get('/owner/monitoring', StockMonitor::class)->name('owner.monitoring');
+    Route::get('/owner/audit', StockAudit::class)->name('owner.audit');
+    Route::get('/owner/adjustments', StockAdjustmentIndex::class)->name('owner.adjustments');
 
     Route::get('/profile/owner', function () {
         return view('profile');

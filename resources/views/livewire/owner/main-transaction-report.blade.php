@@ -1,6 +1,6 @@
 <x-slot name="header">
     <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-        {{ __('Transaction Report') }}
+        {{ __('Report') }}
     </h2>
 </x-slot>
 
@@ -56,7 +56,8 @@
                     <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Total
                         Pendapatan</p>
                     <h3 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Rp
-                        {{ number_format($stats['total_revenue'], 0, ',', '.') }}</h3>
+                        {{ number_format($stats['total_revenue'], 0, ',', '.') }}
+                    </h3>
                 </div>
             </div>
 
@@ -73,7 +74,8 @@
                     <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Total
                         Transaksi</p>
                     <h3 class="text-2xl font-bold text-gray-900 dark:text-gray-100">{{ $stats['total_transactions'] }}
-                        <span class="text-sm font-normal text-gray-400">Trx</span></h3>
+                        <span class="text-sm font-normal text-gray-400">Trx</span>
+                    </h3>
                 </div>
             </div>
 
@@ -89,7 +91,8 @@
                     <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Rata-rata /
                         Trx</p>
                     <h3 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Rp
-                        {{ number_format($stats['avg_transaction'], 0, ',', '.') }}</h3>
+                        {{ number_format($stats['avg_transaction'], 0, ',', '.') }}
+                    </h3>
                 </div>
             </div>
         </div>
@@ -128,9 +131,11 @@
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                                        {{ $trx->branch->name }}</div>
+                                        {{ $trx->branch->name }}
+                                    </div>
                                     <div class="text-xs text-gray-500 dark:text-gray-400">
-                                        {{ Str::limit($trx->branch->address, 30) }}</div>
+                                        {{ Str::limit($trx->branch->address, 30) }}
+                                    </div>
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="flex items-center gap-2">
@@ -144,13 +149,16 @@
                                 </td>
                                 <td class="px-6 py-4 text-right">
                                     <div class="text-sm font-bold text-gray-900 dark:text-gray-100">Rp
-                                        {{ number_format($trx->total_price, 0, ',', '.') }}</div>
+                                        {{ number_format($trx->total_price, 0, ',', '.') }}
+                                    </div>
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="text-sm text-gray-900 dark:text-gray-100">
-                                        {{ $trx->created_at->translatedFormat('d M Y') }}</div>
+                                        {{ $trx->created_at->translatedFormat('d M Y') }}
+                                    </div>
                                     <div class="text-xs text-gray-500 dark:text-gray-400">
-                                        {{ $trx->created_at->format('H:i') }} WIB</div>
+                                        {{ $trx->created_at->format('H:i') }} WIB
+                                    </div>
                                 </td>
                             </tr>
                         @empty

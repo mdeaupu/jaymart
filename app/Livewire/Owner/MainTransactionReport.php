@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Report;
+namespace App\Livewire\Owner;
 
 use App\Models\Branches;
 use App\Models\Transactions;
@@ -27,8 +27,6 @@ class MainTransactionReport extends Component
         $this->endDate = now()->format('Y-m-d');
     }
 
-
-    // app/Livewire/Report/MainTransactionReport.php
     public function render()
     {
         $query = Transactions::with(['branch', 'user'])
@@ -38,7 +36,7 @@ class MainTransactionReport extends Component
             $query->where('branch_id', $this->branchId);
         }
 
-        return view('livewire.report.main-transaction-report', [
+        return view('livewire.owner.main-transaction-report', [
             'transactions' => $query->latest()->paginate(10),
             'branches' => Branches::all(),
             'stats' => [

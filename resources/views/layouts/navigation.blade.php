@@ -52,6 +52,26 @@ new class extends Component {
                         {{ __('Branches Management') }}
                     </x-nav-link>
                 </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="auth()->user()->hasRole('owner') ? route('owner.monitoring') : '#'"
+                        :active="request()->routeIs('owner.monitoring')" wire:navigate>
+                        {{ __('Stock Monitoring') }}
+                    </x-nav-link>
+                </div>
+
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="auth()->user()->hasRole('owner') ? route('owner.adjustments') : '#'"
+                        :active="request()->routeIs('owner.adjustments')" wire:navigate>
+                        {{ __('Stock Approvals') }}
+                    </x-nav-link>
+                </div>
+
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="auth()->user()->hasRole('owner') ? route('owner.audit') : '#'"
+                        :active="request()->routeIs('owner.audit')" wire:navigate>
+                        {{ __('Audit Log') }}
+                    </x-nav-link>
+                </div>
             </div>
 
             <!-- Settings Dropdown -->
