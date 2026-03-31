@@ -11,6 +11,7 @@ new class extends Component {
     {
         $logout();
 
+        $this->dispatch('prepare-for-logout');
         $this->redirect('/', navigate: true);
     }
 }; ?>
@@ -186,7 +187,7 @@ new class extends Component {
                 </x-responsive-nav-link>
 
                 <!-- Authentication -->
-                <button wire:click="logout" class="w-full text-start">
+                <button wire:click="logout" class="w-full text-start" @click="localStorage.removeItem('color-theme')">
                     <x-responsive-nav-link>
                         {{ __('Log Out') }}
                     </x-responsive-nav-link>

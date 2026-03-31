@@ -1,128 +1,90 @@
 <x-slot name="header">
-    <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-        {{ __('User Management') }}
-    </h2>
+    <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">{{ __('User Management') }}</h2>
 </x-slot>
 
-<div class="py-12">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        @if (session()->has('message'))
-            <div
-                class="mb-4 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 dark:bg-green-900/30 dark:text-green-400 rounded shadow-sm">
-                {{ session('message') }}
-            </div>
-        @endif
-
-        @if (session()->has('error'))
-            <div
-                class="mb-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700 dark:bg-red-900/30 dark:text-red-400 rounded shadow-sm">
-                {{ session('error') }}
-            </div>
-        @endif
-        <div class="mb-6 flex justify-between items-center">
-            <p class="text-sm text-gray-600 dark:text-gray-400">Kelola hak akses dan penempatan cabang pegawai.</p>
+<div class="py-10 mx-auto sm:px-6 lg:px-8">
+    <x-alert type="success" :message="session('message')" />
+    <x-alert type="error" :message="session('error')" />
+    <div class="mb-2 py-2">
+        <div class="h-11 items-center flex justify-between">
+            <p class="text-sm text-gray-800 dark:text-gray-400">Kelola hak akses dan penempatan cabang pegawai.</p>
             <button wire:click="create"
-                class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
-                {{ __('Tambah User') }}
+                class="inline-flex items-center px-5 py-2.5 bg-gray-600 border border-transparent rounded-lg font-medium text-sm text-white tracking-wide hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-offset-2 shadow-md active:scale-95 transition-all duration-200">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                </svg>
+                Tambah User
             </button>
-        </div>
-
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-            <div class="p-6 text-gray-900 dark:text-gray-100">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="border-b border-gray-100 dark:border-gray-700">
-                                <th class="px-4 py-3 text-sm font-semibold text-gray-700 dark:text-gray-300">
-                                    {{ __('Nama / Email') }}
-                                </th>
-                                <th class="px-4 py-3 text-sm font-semibold text-gray-700 dark:text-gray-300">
-                                    {{ __('Role') }}
-                                </th>
-                                <th class="px-4 py-3 text-sm font-semibold text-gray-700 dark:text-gray-300">
-                                    {{ __('Cabang') }}
-                                </th>
-                                <th
-                                    class="px-4 py-3 text-sm font-semibold text-gray-700 dark:text-gray-300 text-center">
-                                    {{ __('Aksi') }}
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
-                            @foreach($users as $user)
-                                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
-                                    <td class="px-4 py-4">
-                                        <div class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ $user->name }}
-                                        </div>
-                                        <div class="text-xs text-gray-500 dark:text-gray-400">{{ $user->email }}</div>
-                                    </td>
-                                    <td class="px-4 py-4 text-sm">
-                                        <span
-                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200">
-                                            {{ $user->getRoleNames()->first() }}
-                                        </span>
-                                    </td>
-                                    <td class="px-4 py-4 text-sm text-gray-600 dark:text-gray-400">
-                                        {{ $user->branch->name ?? '-' }}
-                                    </td>
-                                    <td class="px-6 py-4 text-right space-x-3">
-                                        <button wire:click="edit({{ $user->id }})"
-                                            class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 font-medium transition">
-                                            Edit
-                                        </button>
-
-                                        <button wire:click="confirmDelete({{ $user->id }})"
-                                            class="text-red-600 hover:text-red-900 dark:text-red-400 font-medium transition">
-                                            {{ __('Hapus') }}
-                                        </button>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="mt-6">
-                    {{ $users->links() }}
-                </div>
-            </div>
         </div>
     </div>
 
-    @if($isOpen)
-        @include('livewire.user-modal')
-    @endif
+    <x-card class="p-6">
+        <x-table>
+            <x-slot name="header">
+                <th class="px-6 py-3 text-sm font-semibold text-gray-800 dark:text-gray-400">Nama / Email</th>
+                <th class="px-6 py-3 text-sm font-semibold text-gray-800 dark:text-gray-400">Role</th>
+                <th class="px-6 py-3 text-sm font-semibold text-gray-800 dark:text-gray-400">Cabang</th>
+                <th class="px-6 py-3 text-sm font-semibold text-gray-800 dark:text-gray-400 text-center">Aksi</th>
+            </x-slot>
+
+            @foreach($users as $user)
+                <tr wire:key="user-{{ $user->id }}" class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                    <td class="px-4 py-4">
+                        <div class="text-sm font-medium text-gray-800 dark:text-gray-100">{{ $user->name }}</div>
+                        <div class="text-xs text-gray-400">{{ $user->email }}</div>
+                    </td>
+                    <td class="px-4 py-4 text-sm capitalize"><x-badge
+                            color="indigo">{{ $user->getRoleNames()->first() }}</x-badge>
+                    </td>
+                    <td class="px-4 py-4 text-sm text-gray-800 dark:text-gray-100">{{ $user->branch->name ?? '-' }}</td>
+                    <td class="px-6 py-4 space-x-3 text-center">
+                        <button wire:click="edit({{ $user->id }})"
+                            class="inline-flex items-center px-3 py-1.5 bg-indigo-50 text-indigo-700 rounded-lg text-sm font-semibold hover:bg-indigo-100 hover:text-indigo-800 transition-colors duration-200">
+                            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                                </path>
+                            </svg>
+                            Edit
+                        </button>
+
+                        <button wire:click="confirmDelete({{ $user->id }})"
+                            class="inline-flex items-center px-3 py-1.5 bg-red-50 text-red-700 rounded-lg text-sm font-semibold hover:bg-red-100 hover:text-red-800 transition-colors duration-200">
+                            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                </path>
+                            </svg>
+                            Hapus
+                        </button>
+                    </td>
+                </tr>
+            @endforeach
+        </x-table>
+    </x-card>
+    <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700">{{ $users->links() }}</div>
+
+    @if($isOpen) @include('livewire.owner.user-modal') @endif
 
     @if($confirmingUserDeletion)
-        <div class="fixed inset-0 z-[60] flex items-center justify-center p-4">
-            <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm"
-                wire:click="$set('confirmingUserDeletion', false)"></div>
-
-            <div
-                class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl z-10 w-full max-w-sm p-8 text-center border border-gray-100 dark:border-gray-700">
-                <div
-                    class="w-16 h-16 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                    </svg>
-                </div>
-
+        <x-modal-card wire:model.live="confirmingUserDeletion" maxWidth="sm">
+            <div class="p-8 text-center" wire:key="delete-modal-content">
                 <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">Hapus Pengguna?</h3>
-                <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">Apakah Anda yakin? Data user ini akan dihapus
-                    permanen dari sistem.</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">Data ini akan dihapus permanen.</p>
 
                 <div class="flex gap-3">
                     <button type="button" wire:click="$set('confirmingUserDeletion', false)"
-                        class="flex-1 px-4 py-2 text-sm font-semibold text-gray-600 dark:text-gray-400 hover:text-gray-900 transition-colors uppercase tracking-widest">
+                        class="flex-1 px-4 py-2 text-sm font-semibold text-gray-800  bg-gray-100 hover:bg-gray-200 rounded-xl transition-all active:scale-[0.98]">
                         Batal
                     </button>
-                    <button type="button" wire:click="delete"
-                        class="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold text-xs uppercase tracking-widest shadow-lg shadow-red-200 dark:shadow-none transition-all">
-                        Ya, Hapus
+
+                    <button type="button" wire:click="delete" wire:loading.attr="disabled"
+                        class="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold text-xs disabled:opacity-50 transition-all active:scale-[0.98]">
+                        <span wire:loading.remove wire:target="delete">Hapus</span>
+                        <span wire:loading wire:target="delete">Proses...</span>
                     </button>
                 </div>
             </div>
-        </div>
+        </x-modal-card>
     @endif
 </div>

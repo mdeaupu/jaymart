@@ -29,18 +29,18 @@
             </h3>
             <x-table>
                 <x-slot name="header">
-                    <th class="px-2 py-3 text-sm font-semibold text-gray-800 dark:text-gray-400 ">Produk</th>
-                    <th class="px-2 py-3 text-sm font-semibold text-gray-800 dark:text-gray-400 ">Cabang</th>
-                    <th class="px-2 py-3 text-sm font-semibold text-gray-800 dark:text-gray-400 ">Sisa</th>
+                    <th class="px-6 py-3 text-sm font-semibold text-gray-800 dark:text-gray-400 ">Produk</th>
+                    <th class="px-6 py-3 text-sm font-semibold text-gray-800 dark:text-gray-400 ">Cabang</th>
+                    <th class="px-6 py-3 text-sm font-semibold text-gray-800 dark:text-gray-400 ">Sisa</th>
                 </x-slot>
 
                 @forelse($criticalStocks as $stock)
                     <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                        <td class="px-2 py-4 text-sm font-medium text-gray-900 dark:text-gray-100">
+                        <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-gray-100">
                             {{ $stock->product->name }}
                         </td>
-                        <td class="px-2 py-4"><x-badge color="gray">{{ $stock->branch->name }}</x-badge></td>
-                        <td class="px-2 py-4 text-sm font-bold text-red-600 dark:text-red-400">
+                        <td class="px-6 py-4"><x-badge color="gray">{{ $stock->branch->name }}</x-badge></td>
+                        <td class="px-6 py-4 text-sm font-bold text-red-600 dark:text-red-400">
                             {{ $stock->quantity }}
                         </td>
                     </tr>
