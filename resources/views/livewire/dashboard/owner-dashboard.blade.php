@@ -14,7 +14,7 @@
             {{ number_format($income['daily'], 0, ',', '.') }}</x-stat-card>
         <x-stat-card title="Minggu Ini" colorClass="border-indigo-500">Rp
             {{ number_format($income['weekly'], 0, ',', '.') }}</x-stat-card>
-        <x-stat-card title="Bulan Ini" colorClass="border-yellow-500">Rp
+        <x-stat-card title="Bulan Ini" colorClass="border-orange-500">Rp
             {{ number_format($income['monthly'], 0, ',', '.') }}</x-stat-card>
     </div>
 

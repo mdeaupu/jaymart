@@ -36,14 +36,31 @@ class MainTransactionReport extends Component
             $query->where('branch_id', $this->branchId);
         }
 
+        $stats = [
+            'total_revenue' => (clone $query)->sum('total_price'),
+            'total_transactions' => (clone $query)->count(),
+            'avg_transaction' => (clone $query)->avg('total_price') ?? 0,
+        ];
+
+        $transactions = $query->latest()->paginate(10);
+
         return view('livewire.owner.main-transaction-report', [
-            'transactions' => $query->latest()->paginate(10),
+            'transactions' => $transactions,
             'branches' => Branches::all(),
-            'stats' => [
-                'total_revenue' => $query->sum('total_price'),
-                'total_transactions' => $query->count(),
-                'avg_transaction' => $query->avg('total_price') ?? 0,
-            ]
+            'stats' => $stats
         ]);
+    }
+
+    public function updatedBranchId()
+    {
+        $this->resetPage();
+    }
+    public function updatedStartDate()
+    {
+        $this->resetPage();
+    }
+    public function updatedEndDate()
+    {
+        $this->resetPage();
     }
 }
