@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Faker\Factory as Faker;
 
 class BranchSeeder extends Seeder
 {
@@ -13,9 +14,14 @@ class BranchSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('branches')->insert([
-            ['name' => 'Pusat Jakarta', 'address' => 'Jl. Sudirman No. 1', 'created_at' => now()],
-            ['name' => 'Cabang Bandung', 'address' => 'Jl. Asia Afrika No. 10', 'created_at' => now()],
-        ]);
+        $faker = Faker::create('id_ID');
+        foreach (range(1, 50) as $index) {
+            DB::table('branches')->insert([
+                'name' => $faker->company . " Unit " . $faker->city,
+                'address' => $faker->address,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
     }
 }

@@ -14,21 +14,33 @@ class UserManagement extends Component
 {
     use WithPagination;
 
-    // Properti untuk Form
     public $name, $email, $password, $userId, $role, $branch_id;
-
-    // Properti untuk UI State
     public $isOpen = false;
     public $confirmingUserDeletion = false;
-
-    // Reset error setiap kali input berubah
     protected $updatesQueryString = ['userId'];
 
     public function render()
     {
+        $tableNames = config('permission.table_names');
+
+        $users = User::with(['roles', 'branch'])
+            ->select('users.*')
+            ->leftJoin($tableNames['model_has_roles'], 'users.id', '=', $tableNames['model_has_roles'] . '.model_id')
+            ->leftJoin($tableNames['roles'], $tableNames['model_has_roles'] . '.role_id', '=', $tableNames['roles'] . '.id')
+
+            ->orderByRaw("
+            CASE 
+                WHEN {$tableNames['roles']}.name = 'owner' THEN 1
+                WHEN {$tableNames['roles']}.name = 'manager' THEN 2
+                WHEN {$tableNames['roles']}.name = 'staff' THEN 3
+                ELSE 4 
+            END ASC
+        ")
+            ->latest('users.created_at')
+            ->paginate(11);
+
         return view('livewire.owner.user-management', [
-            // Ambil data di sini agar tidak pernah NULL saat di-render ulang
-            'users' => User::with(['roles', 'branch'])->latest()->paginate(10),
+            'users' => $users,
             'branches' => Branches::all() ?? [],
             'roles' => Role::all() ?? []
         ])->layout('layouts.app');

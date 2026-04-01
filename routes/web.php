@@ -9,7 +9,9 @@ use App\Livewire\Owner\MainTransactionReport;
 use App\Livewire\Owner\UserManagement;
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'welcome');
+Route::get('/', function () {
+    return view('welcome');
+})->middleware('guest');
 
 Route::get('dashboard', function () {
     if (auth()->user()->hasRole('owner')) {
