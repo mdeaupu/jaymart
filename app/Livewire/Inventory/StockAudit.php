@@ -15,7 +15,7 @@ class StockAudit extends Component
         return view('livewire.inventory.stock-audit', [
             'logs' => StockLogs::with(['product', 'branch', 'user'])
                 ->latest()
-                ->paginate(15)
+                ->paginate(11)
         ])->layout('layouts.app');
         ;
     }
