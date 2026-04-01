@@ -19,43 +19,45 @@
         </div>
     </div>
 
-    <x-card class="p-6">
-        <x-table>
-            <x-slot name="header">
-                <th class="px-6 py-3 text-sm font-semibold text-gray-800 dark:text-gray-400">Nama Cabang</th>
-                <th class="px-6 py-3 text-sm font-semibold text-gray-800 dark:text-gray-400">Alamat</th>
-                <th class="px-6 py-3 text-sm font-semibold text-gray-800 dark:text-gray-400 text-center">Aksi</th>
-            </x-slot>
+    <x-card>
+        <div class="p-6">
+            <x-table>
+                <x-slot name="header">
+                    <th class="px-6 py-3 text-sm font-semibold text-gray-800 dark:text-gray-400">Nama Cabang</th>
+                    <th class="px-6 py-3 text-sm font-semibold text-gray-800 dark:text-gray-400">Alamat</th>
+                    <th class="px-6 py-3 text-sm font-semibold text-gray-800 dark:text-gray-400 text-center">Aksi</th>
+                </x-slot>
 
-            @foreach($branches as $branch)
-                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                    <td class="px-6 py-4 text-sm font-medium text-gray-800 dark:text-gray-100">{{ $branch->name }}</td>
-                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-100">{{ $branch->address }}</td>
-                    <td class="px-6 py-4 space-x-3 text-center">
-                        <button wire:click="edit({{ $branch->id }})"
-                            class="inline-flex items-center px-3 py-1.5 bg-indigo-50 text-indigo-700 rounded-lg text-sm font-semibold hover:bg-indigo-100 hover:text-indigo-800 transition-colors duration-200">
-                            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
-                                </path>
-                            </svg>
-                            Edit
-                        </button>
-                        <button wire:click="confirmBranchDeletion({{ $branch->id }})"
-                            class="inline-flex items-center px-3 py-1.5 bg-red-50 text-red-700 rounded-lg text-sm font-semibold hover:bg-red-100 hover:text-red-800 transition-colors duration-200">
-                            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
-                                </path>
-                            </svg>
-                            Hapus
-                        </button>
-                    </td>
-                </tr>
-            @endforeach
-        </x-table>
+                @foreach($branches as $branch)
+                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                        <td class="px-6 py-4 text-sm font-medium text-gray-800 dark:text-gray-100">{{ $branch->name }}</td>
+                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-100">{{ $branch->address }}</td>
+                        <td class="px-6 py-4 space-x-3 text-center">
+                            <button wire:click="edit({{ $branch->id }})"
+                                class="inline-flex items-center px-3 py-1.5 bg-indigo-50 text-indigo-700 rounded-lg text-sm font-semibold hover:bg-indigo-100 hover:text-indigo-800 transition-colors duration-200">
+                                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                                    </path>
+                                </svg>
+                                Edit
+                            </button>
+                            <button wire:click="confirmBranchDeletion({{ $branch->id }})"
+                                class="inline-flex items-center px-3 py-1.5 bg-red-50 text-red-700 rounded-lg text-sm font-semibold hover:bg-red-100 hover:text-red-800 transition-colors duration-200">
+                                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                    </path>
+                                </svg>
+                                Hapus
+                            </button>
+                        </td>
+                    </tr>
+                @endforeach
+            </x-table>
+        </div>
+        <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700">{{ $branches->links() }}</div>
     </x-card>
-    <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700">{{ $branches->links() }}</div>
     @if($isOpen) @include('livewire.owner.branch-modal') @endif
 
     @if($confirmingBranchDeletion)
@@ -68,13 +70,13 @@
 
                 <div class="flex gap-3">
                     <button type="button" wire:click="$set('confirmingBranchDeletion', false)"
-                        class="flex-1 px-4 py-2 text-sm font-semibold text-gray-800 bg-gray-100 hover:bg-gray-200 rounded-xl transition-all active:scale-[0.98]">
+                        class="flex-1 px-4 py-3  text-gray-800 font-bold bg-gray-100 hover:bg-gray-200 rounded-xl transition-all active:scale-[0.98]">
                         Batal
                     </button>
 
                     <button type="button" wire:click="delete" wire:loading.attr="disabled"
-                        class="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold text-xs disabled:opacity-50 transition-all active:scale-[0.98]">
-                        <span wire:loading.remove wire:target="delete">Hapus Cabang</span>
+                        class="flex-1 px-4 py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold disabled:opacity-50 transition-all active:scale-[0.98]">
+                        <span wire:loading.remove wire:target="delete">Hapus</span>
                         <span wire:loading wire:target="delete">Menghapus...</span>
                     </button>
                 </div>

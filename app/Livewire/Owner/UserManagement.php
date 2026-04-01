@@ -37,7 +37,7 @@ class UserManagement extends Component
             END ASC
         ")
             ->latest('users.created_at')
-            ->paginate(10);
+            ->paginate(11);
 
         return view('livewire.owner.user-management', [
             'users' => $users,

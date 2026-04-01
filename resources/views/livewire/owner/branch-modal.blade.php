@@ -28,7 +28,7 @@
 
         <div class="mt-8 flex flex-col gap-3">
             <button type="submit" wire:loading.attr="disabled"
-                class="w-full text-center items-center px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 border border-transparent rounded-lg font-bold text-xs text-gray-100 tracking-widest active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all active:scale-95 disabled:opacity-50">
+                class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-gray-100 rounded-xl font-bold shadow-lg transition-all active:scale-[0.98]">
                 <span wire:loading.remove wire:target="store">
                     {{ $branchId ? 'Simpan Perubahan' : 'Tambah Cabang' }}
                 </span>
@@ -37,7 +37,7 @@
                 </span>
             </button>
             <button type="button" wire:click="closeModal"
-                class="w-full px-5 py-2.5 text-sm font-semibold text-gray-100 bg-red-600 hover:bg-red-700 rounded-lg transition-all active:scale-95">
+                class="w-full py-3 bg-red-600 hover:bg-red-700 text-gray-100 rounded-xl font-bold shadow-lg transition-all active:scale-[0.98]">
                 Batal
             </button>
 

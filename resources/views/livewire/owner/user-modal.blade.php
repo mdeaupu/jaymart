@@ -59,12 +59,12 @@
 
         <div class="mt-8 flex flex-col gap-2">
             <button type="submit"
-                class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold shadow-lg transition-all active:scale-[0.98]">
+                class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-gray-100 rounded-xl font-bold shadow-lg transition-all active:scale-[0.98]">
                 {{ $userId ? 'Update Perubahan' : 'Simpan Akun Baru' }}
             </button>
 
             <button type="button" wire:click="closeModal"
-                class="w-full py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold shadow-lg transition-all active:scale-[0.98]">
+                class="w-full py-3 bg-red-600 hover:bg-red-700 text-gray-100 rounded-xl font-bold shadow-lg transition-all active:scale-[0.98]">
                 Batalkan
             </button>
         </div>

@@ -3,11 +3,38 @@
 </x-slot>
 
 <div class="py-10 mx-auto sm:px-6 lg:px-8">
-    <div class="mb-2 py-2">
-        <div class="h-11 flex items-center">
-            <p class="text-sm text-gray-800 dark:text-gray-400">Pantau performa penjualan di seluruh cabang.</p>
+
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div class="mb-2 py-2">
+            <div class="h-11 flex items-center">
+                <p class="text-sm text-gray-800 dark:text-gray-400">Pantau performa penjualan di seluruh cabang.</p>
+            </div>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+            <div>
+                <select wire:model.live="branchId"
+                    class="block w-full px-5 py-2.5 sm:w-48 rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 shadow-sm text-sm">
+                    <option value="">Semua Cabang</option>
+                    @foreach($branches as $branch)
+                        <option value="{{ $branch->id }}">{{ $branch->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div>
+                <input type="date" wire:model.live="startDate"
+                    class="[&::-webkit-calendar-picker-indicator]:dark:invert px-5 py-2.5 block w-full sm:w-40 rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 shadow-sm text-sm"
+                    title="Tanggal Mulai">
+            </div>
+
+            <div>
+                <input type="date" wire:model.live="endDate"
+                    class="[&::-webkit-calendar-picker-indicator]:dark:invert px-5 py-2.5 block w-full sm:w-40 rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 shadow-sm text-sm"
+                    title="Tanggal Akhir">
+            </div>
         </div>
     </div>
+
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <x-stat-card title="Total Pendapatan" colorClass="border-green-500"

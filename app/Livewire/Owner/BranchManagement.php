@@ -24,7 +24,7 @@ class BranchManagement extends Component
     public function render()
     {
         return view('livewire.owner.branch-management', [
-            'branches' => Branches::latest()->paginate(5)
+            'branches' => Branches::latest()->paginate(11)
         ])->layout('layouts.app');
     }
 

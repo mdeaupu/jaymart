@@ -23,7 +23,8 @@ class MainTransactionReport extends Component
         if (!Auth::user()->hasRole('owner')) {
             abort(403, 'Hanya Owner yang dapat mengakses halaman ini.');
         }
-        $this->startDate = now()->startOfMonth()->format('Y-m-d');
+
+        $this->startDate = now()->subDays(30)->format('Y-m-d');
         $this->endDate = now()->format('Y-m-d');
     }
 
@@ -42,7 +43,7 @@ class MainTransactionReport extends Component
             'avg_transaction' => (clone $query)->avg('total_price') ?? 0,
         ];
 
-        $transactions = $query->latest()->paginate(10);
+        $transactions = $query->latest()->paginate(11);
 
         return view('livewire.owner.main-transaction-report', [
             'transactions' => $transactions,
