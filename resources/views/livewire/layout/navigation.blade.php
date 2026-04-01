@@ -48,7 +48,7 @@ new class extends Component {
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="auth()->user()->hasRole('owner') ? route('branches.index') : '#'"
+                    <x-nav-link :href="auth()->user()->hasRole('owner') ? route('owner.branches') : '#'"
                         :active="request()->routeIs('branches.index')" wire:navigate>
                         {{ __('Branches Management') }}
                     </x-nav-link>
