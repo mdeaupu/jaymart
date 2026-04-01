@@ -11,7 +11,15 @@ class BranchManagement extends Component
 
     public $name, $address, $branchId;
     public $isOpen = false;
-    public $confirmingDeletion = false;
+    public $confirmingBranchDeletion = false;
+    public $branchIdBeingDeleted = null;
+
+    public function confirmBranchDeletion($id)
+    {
+        $this->branchIdBeingDeleted = $id;
+        $this->confirmingBranchDeletion = true;
+    }
+
 
     public function render()
     {
@@ -31,6 +39,12 @@ class BranchManagement extends Component
         $this->name = '';
         $this->address = '';
         $this->branchId = null;
+    }
+
+    public function closeModal()
+    {
+        $this->isOpen = false;
+        $this->resetInputFields();
     }
 
     public function store()
@@ -59,19 +73,24 @@ class BranchManagement extends Component
         $this->isOpen = true;
     }
 
-    public function delete($id)
+    public function delete()
     {
-        try {
-            $branch = Branches::findOrFail($id);
-            $branch->delete();
+        if ($this->branchIdBeingDeleted) {
+            try {
+                $branch = Branches::findOrFail($this->branchIdBeingDeleted);
+                $branch->delete();
 
-            session()->flash('message', 'Cabang berhasil dihapus.');
-        } catch (\Illuminate\Database\QueryException $e) {
-            if ($e->getCode() == "23000") {
-                session()->flash('error', 'Cabang tidak bisa dihapus karena masih memiliki data transaksi atau stok yang terkait.');
-            } else {
-                session()->flash('error', 'Terjadi kesalahan saat menghapus data.');
+                session()->flash('message', 'Cabang berhasil dihapus.');
+            } catch (\Illuminate\Database\QueryException $e) {
+                if ($e->getCode() == "23000") {
+                    session()->flash('error', 'Cabang tidak bisa dihapus karena masih memiliki data terkait.');
+                } else {
+                    session()->flash('error', 'Terjadi kesalahan saat menghapus data.');
+                }
             }
+
+            $this->confirmingBranchDeletion = false;
+            $this->branchIdBeingDeleted = null;
         }
     }
 }

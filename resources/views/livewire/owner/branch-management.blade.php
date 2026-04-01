@@ -1,122 +1,84 @@
 <x-slot name="header">
-    <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-        {{ __('Branches Management') }}
+    <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">{{ __('Branches Management') }}
     </h2>
 </x-slot>
 
-<div class="py-12">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        @if (session()->has('error'))
-            <div
-                class="mb-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700 dark:bg-red-900/30 dark:text-red-400 rounded shadow-sm">
-                {{ session('error') }}
-            </div>
-        @endif
-
-        @if (session()->has('message'))
-            <div
-                class="mb-4 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 dark:bg-green-900/30 dark:text-green-400 rounded shadow-sm">
-                {{ session('message') }}
-            </div>
-        @endif
-        <div class="mb-6 flex justify-between items-center">
+<div class="py-10 mx-auto sm:px-6 lg:px-8">
+    <x-alert type="error" :message="session('error')" />
+    <x-alert type="success" :message="session('message')" />
+    <div class="mb-2 py-2">
+        <div class="h-11 items-center flex justify-between">
             <p class="text-sm text-gray-600 dark:text-gray-400">Kelola lokasi dan data operasional cabang mini market.
             </p>
             <button wire:click="create"
-                class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
-                {{ __('Tambah Cabang') }}
-            </button>
-        </div>
-
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-            <div class="p-6 text-gray-900 dark:text-gray-100">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="border-b border-gray-100 dark:border-gray-700">
-                                <th class="px-4 py-3 text-sm font-semibold text-gray-700 dark:text-gray-300">
-                                    {{ __('Nama Cabang') }}
-                                </th>
-                                <th class="px-4 py-3 text-sm font-semibold text-gray-700 dark:text-gray-300">
-                                    {{ __('Alamat') }}
-                                </th>
-                                <th class="px-6 py-3 text-sm font-semibold text-gray-700 dark:text-gray-300 text-right">
-                                    {{ __('Aksi') }}
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
-                            @foreach($branches as $branch)
-                                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
-                                    <td class="px-4 py-4">
-                                        <div class="text-sm font-medium text-gray-900 dark:text-gray-100">
-                                            {{ $branch->name }}
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-4 text-sm text-gray-600 dark:text-gray-400">
-                                        {{ $branch->address }}
-                                    </td>
-                                    <td class="px-6 py-4 text-right space-x-3">
-                                        <button wire:click="edit({{ $branch->id }})"
-                                            class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 font-medium transition">
-                                            Edit
-                                        </button>
-
-                                        <button wire:click="delete({{ $branch->id }})"
-                                            class="text-red-600 hover:text-red-900 dark:text-red-400 font-medium transition">
-                                            Hapus
-                                        </button>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="mt-6">
-                    {{ $branches->links() }}
-                </div>
-            </div>
+                class="inline-flex items-center px-5 py-2.5 bg-gray-600 border border-transparent rounded-lg font-medium text-sm text-white tracking-wide hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-offset-2 shadow-md active:scale-95 transition-all duration-200"><svg
+                    class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                </svg>Tambah
+                Cabang</button>
         </div>
     </div>
 
-    @if($isOpen)
-        <div class="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm" wire:click="$set('isOpen', false)"></div>
-            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl z-10 w-full max-w-md transform transition-all">
-                <form wire:submit.prevent="store" class="p-8">
-                    <h3 class="text-xl font-bold mb-6 dark:text-white text-center">Data Cabang</h3>
+    <x-card class="p-6">
+        <x-table>
+            <x-slot name="header">
+                <th class="px-6 py-3 text-sm font-semibold text-gray-800 dark:text-gray-400">Nama Cabang</th>
+                <th class="px-6 py-3 text-sm font-semibold text-gray-800 dark:text-gray-400">Alamat</th>
+                <th class="px-6 py-3 text-sm font-semibold text-gray-800 dark:text-gray-400 text-center">Aksi</th>
+            </x-slot>
 
-                    <div class="space-y-4">
-                        <div>
-                            <x-input-label value="Nama Toko" class="dark:text-gray-300" />
-                            <x-text-input wire:model="name"
-                                class="w-full mt-1 bg-gray-50 dark:bg-gray-900 border-none rounded-xl shadow-inner"
-                                placeholder="Jaymart Jakarta" />
-                            <x-input-error :messages="$errors->get('name')" class="mt-1" />
-                        </div>
-
-                        <div>
-                            <x-input-label value="Alamat Lengkap" class="dark:text-gray-300" />
-                            <textarea wire:model="address"
-                                class="w-full mt-1 bg-gray-50 dark:bg-gray-900 border-none rounded-xl shadow-inner text-gray-900 dark:text-gray-300 focus:ring-2 focus:ring-indigo-500"
-                                rows="3" placeholder="Jl. Raya No..."></textarea>
-                            <x-input-error :messages="$errors->get('address')" class="mt-1" />
-                        </div>
-                    </div>
-
-                    <div class="mt-8 flex gap-3">
-                        <button type="button" wire:click="$set('isOpen', false)"
-                            class="flex-1 px-4 py-2.5 text-sm font-semibold text-gray-600 dark:text-gray-400 hover:text-gray-900 transition-colors uppercase tracking-widest">
-                            Batal
+            @foreach($branches as $branch)
+                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                    <td class="px-6 py-4 text-sm font-medium text-gray-800 dark:text-gray-100">{{ $branch->name }}</td>
+                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-100">{{ $branch->address }}</td>
+                    <td class="px-6 py-4 space-x-3 text-center">
+                        <button wire:click="edit({{ $branch->id }})"
+                            class="inline-flex items-center px-3 py-1.5 bg-indigo-50 text-indigo-700 rounded-lg text-sm font-semibold hover:bg-indigo-100 hover:text-indigo-800 transition-colors duration-200">
+                            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                                </path>
+                            </svg>
+                            Edit
                         </button>
-                        <button type="submit"
-                            class="flex-1 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow-lg font-bold text-xs uppercase tracking-widest transition-all">
-                            Simpan
+                        <button wire:click="confirmBranchDeletion({{ $branch->id }})"
+                            class="inline-flex items-center px-3 py-1.5 bg-red-50 text-red-700 rounded-lg text-sm font-semibold hover:bg-red-100 hover:text-red-800 transition-colors duration-200">
+                            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                </path>
+                            </svg>
+                            Hapus
                         </button>
-                    </div>
-                </form>
+                    </td>
+                </tr>
+            @endforeach
+        </x-table>
+    </x-card>
+    <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700">{{ $branches->links() }}</div>
+    @if($isOpen) @include('livewire.owner.branch-modal') @endif
+
+    @if($confirmingBranchDeletion)
+        <x-modal-card wire:model.live="confirmingBranchDeletion" maxWidth="sm">
+            <div class="p-8 text-center" wire:key="delete-branch-modal">
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">Hapus Cabang?</h3>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">
+                    Data cabang ini akan dihapus secara permanen. Pastikan tidak ada data transaksi yang terkait.
+                </p>
+
+                <div class="flex gap-3">
+                    <button type="button" wire:click="$set('confirmingBranchDeletion', false)"
+                        class="flex-1 px-4 py-2 text-sm font-semibold text-gray-800 bg-gray-100 hover:bg-gray-200 rounded-xl transition-all active:scale-[0.98]">
+                        Batal
+                    </button>
+
+                    <button type="button" wire:click="delete" wire:loading.attr="disabled"
+                        class="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold text-xs disabled:opacity-50 transition-all active:scale-[0.98]">
+                        <span wire:loading.remove wire:target="delete">Hapus Cabang</span>
+                        <span wire:loading wire:target="delete">Menghapus...</span>
+                    </button>
+                </div>
             </div>
-        </div>
+        </x-modal-card>
     @endif
 </div>
