@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Dashboard;
+namespace App\Livewire\Owner;
 
 use App\Models\Branches;
 use App\Models\Stocks;
@@ -8,7 +8,7 @@ use App\Models\Transactions;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
-class OwnerDashboard extends Component
+class Dashboard extends Component
 {
     public function render()
     {
@@ -32,7 +32,7 @@ class OwnerDashboard extends Component
         });
         $chartData = collect($chartData);
 
-        return view('livewire.dashboard.owner-dashboard', [
+        return view('livewire.owner.dashboard', [
             'income' => $income,
             'criticalStocks' => $criticalStocks,
             'chartData' => $chartData

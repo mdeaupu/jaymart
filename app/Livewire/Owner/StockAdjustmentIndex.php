@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Inventory;
+namespace App\Livewire\Owner;
 
 use App\Models\StockAdjustments;
 use App\Models\StockLogs;
@@ -13,7 +13,7 @@ class StockAdjustmentIndex extends Component
     use WithPagination;
     public function render()
     {
-        return view('livewire.inventory.stock-adjustment-index', [
+        return view('livewire.owner.stock-adjustment-index', [
             'adjustments' => StockAdjustments::with(['branch', 'product'])
                 ->where('status', 'pending')
                 ->latest()

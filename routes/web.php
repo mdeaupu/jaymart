@@ -1,12 +1,13 @@
 <?php
 
-use App\Livewire\Dashboard\OwnerDashboard;
-use App\Livewire\Inventory\StockAdjustmentIndex;
-use App\Livewire\Inventory\StockAudit;
-use App\Livewire\Inventory\StockMonitor;
+
 use App\Livewire\Owner\BranchManagement;
+use App\Livewire\Owner\Dashboard;
 use App\Livewire\Owner\MainTransactionReport;
+use App\Livewire\Owner\StockAudit;
+use App\Livewire\Owner\StockMonitor;
 use App\Livewire\Owner\UserManagement;
+use App\Livewire\Owner\StockAdjustmentIndex;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -20,30 +21,23 @@ Route::get('dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware(['auth', 'verified', 'role:owner'])->group(function () {
-    Route::get('/dashboard/owner', OwnerDashboard::class)->name('owner.dashboard');
+Route::middleware(['auth', 'verified', 'role:owner'])
+    ->prefix('owner')
+    ->name('owner.')
+    ->group(function () {
 
-    Route::get('/report/owner', MainTransactionReport::class)->name('owner.report.main');
+        Route::get('/dashboard', Dashboard::class)->name('dashboard');
+        Route::get('/report', MainTransactionReport::class)->name('report.main');
+        Route::view('/profile', 'profile')->name('profile');
 
-    Route::middleware(['auth', 'role:owner'])->group(function () {
-        Route::get('/owner/users', UserManagement::class)->name('owner.users');
+        Route::get('/users', UserManagement::class)->name('users');
+        Route::get('/branches', BranchManagement::class)->name('branches');
+
+        Route::get('/monitoring', StockMonitor::class)->name('monitoring');
+        Route::get('/audit', StockAudit::class)->name('audit');
+        Route::get('/adjustments', StockAdjustmentIndex::class)->name('adjustments');
     });
 
-    Route::middleware(['auth', 'role:owner'])->group(function () {
-        Route::get('/owner/branches', BranchManagement::class)->name('branches.index');
-    });
-
-    Route::get('/owner/monitoring', StockMonitor::class)->name('owner.monitoring');
-    Route::get('/owner/audit', StockAudit::class)->name('owner.audit');
-    Route::get('/owner/adjustments', StockAdjustmentIndex::class)->name('owner.adjustments');
-
-    Route::get('/profile/owner', function () {
-        return view('profile');
-    })->name('owner.profile');
-});
-
-Route::view('profile', 'profile')
-    ->middleware(['auth'])
-    ->name('profile');
+Route::view('profile', 'profile')->middleware(['auth'])->name('profile');
 
 require __DIR__ . '/auth.php';

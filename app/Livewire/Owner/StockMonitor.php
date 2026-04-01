@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Inventory;
+namespace App\Livewire\Owner;
 
 use App\Models\Branches;
 use App\Models\Stocks;
@@ -22,7 +22,7 @@ class StockMonitor extends Component
             ->latest()
             ->paginate(11);
 
-        return view('livewire.inventory.stock-monitor', [
+        return view('livewire.owner.stock-monitor', [
             'stocks' => $stocks,
             'branches' => Branches::all()
         ])->layout('layouts.app');
