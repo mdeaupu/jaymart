@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Faker\Factory as Faker;
 
 class StockLogSeeder extends Seeder
 {
@@ -13,17 +14,20 @@ class StockLogSeeder extends Seeder
      */
     public function run(): void
     {
-        $user = DB::table('users')->first();
-        $product = DB::table('products')->first();
-        
-        DB::table('stock_logs')->insert([
-            'branch_id' => $user->branch_id,
-            'product_id' => $product->id,
-            'user_id' => $user->id,
-            'type' => 'in',
-            'amount' => 50,
-            'reason' => 'Restock mingguan',
-            'created_at' => now(),
-        ]);
+        $faker = Faker::create();
+        $types = ['in', 'out', 'expired', 'adjustment'];
+
+        foreach (range(1, 50) as $index) {
+            DB::table('stock_logs')->insert([
+                'branch_id' => $faker->numberBetween(1, 50),
+                'product_id' => $faker->numberBetween(1, 50),
+                'user_id' => $faker->numberBetween(1, 50),
+                'type' => $faker->randomElement($types),
+                'amount' => $faker->numberBetween(1, 20),
+                'reason' => $faker->sentence(),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
     }
 }

@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Faker\Factory as Faker;
 
 class StockAdjustmentSeeder extends Seeder
 {
@@ -13,20 +13,24 @@ class StockAdjustmentSeeder extends Seeder
      */
     public function run(): void
     {
-        $user = DB::table('users')->first();
-        $product = DB::table('products')->where('name', 'Es Teh Manis')->first();
-        
-        DB::table('stock_adjustments')->insert([
-            'branch_id' => $user->branch_id,
-            'product_id' => $product->id,
-            'user_id' => $user->id,
-            'old_quantity' => 100,
-            'new_quantity' => 95,
-            'adjustment_amount' => -5,
-            'reason' => 'Gelas pecah/tumpah',
-            'status' => 'approved',
-            'approved_by' => $user->id,
-            'created_at' => now(),
-        ]);
+        $faker = Faker::create('id_ID');
+
+        for ($i = 0; $i < 50; $i++) {
+            $oldQty = $faker->numberBetween(50, 100);
+            $adjAmount = $faker->numberBetween(-20, 20);
+
+            DB::table('stock_adjustments')->insert([
+                'branch_id' => $faker->numberBetween(1, 50),
+                'product_id' => $faker->numberBetween(1, 50),
+                'user_id' => $faker->numberBetween(1, 50),
+                'old_quantity' => $oldQty,
+                'adjustment_amount' => $adjAmount,
+                'new_quantity' => $oldQty + $adjAmount,
+                'reason' => $faker->sentence(),
+                'status' => 'pending',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
     }
 }
