@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f59968f214c706c1e91394146a8833c9",
+    "content-hash": "48dc69c9f8ab616beaf9c0ad66180173",
     "packages": [
         {
             "name": "brick/math",
@@ -2022,16 +2022,16 @@
         },
         {
             "name": "livewire/livewire",
-            "version": "v3.7.12",
+            "version": "v4.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/livewire/livewire.git",
-                "reference": "7fcb612d1274980d80703efb5658e58d6d37ada9"
+                "reference": "d07bcb6fd04037a90ca5187b7857c7349a8e6d1e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/livewire/livewire/zipball/7fcb612d1274980d80703efb5658e58d6d37ada9",
-                "reference": "7fcb612d1274980d80703efb5658e58d6d37ada9",
+                "url": "https://api.github.com/repos/livewire/livewire/zipball/d07bcb6fd04037a90ca5187b7857c7349a8e6d1e",
+                "reference": "d07bcb6fd04037a90ca5187b7857c7349a8e6d1e",
                 "shasum": ""
             },
             "require": {
@@ -2086,7 +2086,7 @@
             "description": "A front-end framework for Laravel.",
             "support": {
                 "issues": "https://github.com/livewire/livewire/issues",
-                "source": "https://github.com/livewire/livewire/tree/v3.7.12"
+                "source": "https://github.com/livewire/livewire/tree/v4.2.3"
             },
             "funding": [
                 {
@@ -2094,7 +2094,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-03-25T23:04:42+00:00"
+            "time": "2026-03-30T22:17:37+00:00"
         },
         {
             "name": "livewire/volt",
@@ -9690,5 +9690,5 @@
         "php": "^8.2"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }

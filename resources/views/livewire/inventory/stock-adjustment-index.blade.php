@@ -65,6 +65,10 @@
                                         class="inline-flex items-center px-3 py-1.5 bg-indigo-600 dark:bg-indigo-500 border border-transparent rounded-md font-bold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 dark:hover:bg-indigo-400 active:bg-indigo-900 focus:outline-none focus:border-indigo-900 focus:ring ring-indigo-300 disabled:opacity-25 transition ease-in-out duration-150">
                                         Setujui
                                     </button>
+                                    <button wire:click="rejectAdjustment({{ $adj->id }})"
+                                        class="bg-red-500 text-white px-2 py-1 rounded">
+                                        Reject
+                                    </button>
                                 </td>
                             </tr>
                         @empty
