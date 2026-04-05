@@ -53,4 +53,16 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function dashboardUrl(): string
+    {
+        return match ($this->role) {
+            'owner' => route('owner.dashboard'),
+            // 'manager' => route('manager.dashboard'),
+            // 'supervisor' => route('supervisor.dashboard'),
+            // 'cashier' => route('cashier.dashboard'),
+            // 'warehouse' => route('warehouse.dashboard'),
+            default => route('login'),
+        };
+    }
 }

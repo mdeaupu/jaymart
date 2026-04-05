@@ -23,7 +23,8 @@ class MainTransactionReport extends Component
         if (!Auth::user()->hasRole('owner')) {
             abort(403, 'Hanya Owner yang dapat mengakses halaman ini.');
         }
-        $this->startDate = now()->startOfMonth()->format('Y-m-d');
+
+        $this->startDate = now()->subDays(30)->format('Y-m-d');
         $this->endDate = now()->format('Y-m-d');
     }
 
@@ -36,14 +37,31 @@ class MainTransactionReport extends Component
             $query->where('branch_id', $this->branchId);
         }
 
+        $stats = [
+            'total_revenue' => (clone $query)->sum('total_price'),
+            'total_transactions' => (clone $query)->count(),
+            'avg_transaction' => (clone $query)->avg('total_price') ?? 0,
+        ];
+
+        $transactions = $query->latest()->paginate(11);
+
         return view('livewire.owner.main-transaction-report', [
-            'transactions' => $query->latest()->paginate(10),
+            'transactions' => $transactions,
             'branches' => Branches::all(),
-            'stats' => [
-                'total_revenue' => $query->sum('total_price'),
-                'total_transactions' => $query->count(),
-                'avg_transaction' => $query->avg('total_price') ?? 0,
-            ]
+            'stats' => $stats
         ]);
+    }
+
+    public function updatedBranchId()
+    {
+        $this->resetPage();
+    }
+    public function updatedStartDate()
+    {
+        $this->resetPage();
+    }
+    public function updatedEndDate()
+    {
+        $this->resetPage();
     }
 }

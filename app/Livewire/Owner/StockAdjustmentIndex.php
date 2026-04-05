@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Inventory;
+namespace App\Livewire\Owner;
 
 use App\Models\StockAdjustments;
 use App\Models\StockLogs;
@@ -13,25 +13,23 @@ class StockAdjustmentIndex extends Component
     use WithPagination;
     public function render()
     {
-        return view('livewire.inventory.stock-adjustment-index', [
+        return view('livewire.owner.stock-adjustment-index', [
             'adjustments' => StockAdjustments::with(['branch', 'product'])
                 ->where('status', 'pending')
                 ->latest()
-                ->paginate(10)
-        ])->layout('layouts.app'); // Memastikan layout terpanggil
+                ->paginate(11)
+        ])->layout('layouts.app');
     }
 
     public function approveAdjustment($id)
     {
         $adj = StockAdjustments::findOrFail($id);
 
-        // Pastikan hanya data pending yang bisa di-approve
         if ($adj->status !== 'pending') {
             session()->flash('error', 'Permintaan ini sudah diproses.');
             return;
         }
 
-        // 1. Update Stok Utama (Gunakan increment untuk keamanan data)
         $stock = Stocks::where('branch_id', $adj->branch_id)
             ->where('product_id', $adj->product_id)
             ->first();
@@ -40,7 +38,6 @@ class StockAdjustmentIndex extends Component
             $stock->increment('quantity', $adj->adjustment_amount);
         }
 
-        // 2. Catat ke Stock Log (Audit Trail)
         StockLogs::create([
             'branch_id' => $adj->branch_id,
             'product_id' => $adj->product_id,
@@ -50,7 +47,6 @@ class StockAdjustmentIndex extends Component
             'reason' => "Adjustment Approved: " . $adj->reason,
         ]);
 
-        // 3. Update status adjustment
         $adj->update([
             'status' => 'approved',
             'approved_by' => auth()->id()

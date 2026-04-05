@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Inventory;
+namespace App\Livewire\Owner;
 
 use App\Models\Branches;
 use App\Models\Stocks;
@@ -20,9 +20,9 @@ class StockMonitor extends Component
             ->when($this->branch_id, fn($q) => $q->where('branch_id', $this->branch_id))
             ->whereHas('product', fn($q) => $q->where('name', 'like', '%' . $this->search . '%'))
             ->latest()
-            ->paginate(10);
+            ->paginate(11);
 
-        return view('livewire.inventory.stock-monitor', [
+        return view('livewire.owner.stock-monitor', [
             'stocks' => $stocks,
             'branches' => Branches::all()
         ])->layout('layouts.app');

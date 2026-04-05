@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Dashboard;
+namespace App\Livewire\Owner;
 
 use App\Models\Branches;
 use App\Models\Stocks;
@@ -8,26 +8,22 @@ use App\Models\Transactions;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
-class OwnerDashboard extends Component
+class Dashboard extends Component
 {
     public function render()
     {
-        // 1. Ringkasan Pendapatan dari semua cabang
         $income = [
             'daily' => Transactions::whereDate('created_at', today())->sum('total_price'),
             'weekly' => Transactions::whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])->sum('total_price'),
             'monthly' => Transactions::whereMonth('created_at', now()->month)->sum('total_price'),
         ];
 
-        // 2. Notifikasi Stok Kritis (Berdasarkan tabel stocks & low_stock_threshold)
-        // Kita ambil data stock yang <= threshold beserta info produk dan cabangnya
         $criticalStocks = Stocks::with(['product', 'branch'])
             ->whereColumn('quantity', '<=', 'low_stock_threshold')
             ->orderBy('quantity', 'asc')
             ->limit(10)
             ->get();
 
-        // 3. Data Grafik: Performa Penjualan per Cabang
         $chartData = Branches::all()->map(function ($branch) {
             return [
                 'name' => $branch->name,
@@ -36,7 +32,7 @@ class OwnerDashboard extends Component
         });
         $chartData = collect($chartData);
 
-        return view('livewire.dashboard.owner-dashboard', [
+        return view('livewire.owner.dashboard', [
             'income' => $income,
             'criticalStocks' => $criticalStocks,
             'chartData' => $chartData

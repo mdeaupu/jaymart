@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Inventory;
+namespace App\Livewire\Owner;
 
 use App\Models\StockLogs;
 use Livewire\Component;
@@ -16,10 +16,10 @@ class StockAudit extends Component
 
     public function render()
     {
-        return view('livewire.inventory.stock-audit', [
+        return view('livewire.owner.stock-audit', [
             'logs' => StockLogs::with(['product', 'branch', 'user'])
                 ->latest()
-                ->paginate(15)
+                ->paginate(11)
         ])->layout('layouts.app');
         ;
     }
