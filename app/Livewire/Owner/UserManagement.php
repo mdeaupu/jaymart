@@ -27,13 +27,14 @@ class UserManagement extends Component
             ->select('users.*')
             ->leftJoin($tableNames['model_has_roles'], 'users.id', '=', $tableNames['model_has_roles'] . '.model_id')
             ->leftJoin($tableNames['roles'], $tableNames['model_has_roles'] . '.role_id', '=', $tableNames['roles'] . '.id')
-
+            ->where($tableNames['roles'] . '.name', '!=', 'owner')
             ->orderByRaw("
             CASE 
                 WHEN {$tableNames['roles']}.name = 'owner' THEN 1
                 WHEN {$tableNames['roles']}.name = 'manager' THEN 2
-                WHEN {$tableNames['roles']}.name = 'staff' THEN 3
-                ELSE 4 
+                WHEN {$tableNames['roles']}.name = 'supervisor' THEN 3
+                WHEN {$tableNames['roles']}.name = 'cashier' THEN 4
+                WHEN {$tableNames['roles']}.name = 'warehouse' THEN 5
             END ASC
         ")
             ->latest('users.created_at')

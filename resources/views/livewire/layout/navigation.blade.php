@@ -23,56 +23,99 @@ new class extends Component {
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ auth()->user()->hasRole('owner') ? route('owner.dashboard') : route('dashboard') }}"
-                        wire:navigate>
+                    <a href="{{ auth()->user()->dashboardUrl() }}" wire:navigate>
                         <img src="{{ Vite::asset('resources/images/logo.png') }}" alt="" width="64px">
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
+                @role('owner')
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="auth()->user()->hasRole('owner') ? route('owner.dashboard') : route('dashboard')"
-                        :active="auth()->user()->hasRole('owner') ? request()->routeIs('owner.dashboard') : request()->routeIs('dashboard')" wire:navigate>
+                    <x-nav-link :href="route('owner.dashboard')" :active="request()->routeIs('owner.dashboard')"
+                        wire:navigate>
                         {{ __('Dashboard') }}
                     </x-nav-link>
                 </div>
+
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="auth()->user()->hasRole('owner') ? route('owner.report.main') : route('report.main')" :active="auth()->user()->hasRole('owner') ? request()->routeIs('owner.report.main') : request()->routeIs('report.main')" wire:navigate>
+                    <x-nav-link :href="route('owner.report.main')" :active="request()->routeIs('owner.report.*')"
+                        wire:navigate>
                         {{ __('Report') }}
                     </x-nav-link>
                 </div>
+
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="auth()->user()->hasRole('owner') ? route('owner.users') : '#' "
-                        :active="request()->routeIs('owner.users')" wire:navigate>
+                    <x-nav-link :href="route('owner.users')" :active="request()->routeIs('owner.users')" wire:navigate>
                         {{ __('User Management') }}
                     </x-nav-link>
                 </div>
+
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="auth()->user()->hasRole('owner') ? route('owner.branches') : '#'"
-                        :active="request()->routeIs('branches.index')" wire:navigate>
-                        {{ __('Branches Management') }}
+                    <x-nav-link :href="route('owner.branches')" :active="request()->routeIs('owner.branches')"
+                        wire:navigate>
+                        {{ __('Branches') }}
                     </x-nav-link>
                 </div>
+
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="auth()->user()->hasRole('owner') ? route('owner.monitoring') : '#'"
-                        :active="request()->routeIs('owner.monitoring')" wire:navigate>
+                    <x-nav-link :href="route('owner.monitoring')" :active="request()->routeIs('owner.monitoring')"
+                        wire:navigate>
                         {{ __('Stock Monitoring') }}
                     </x-nav-link>
                 </div>
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="auth()->user()->hasRole('owner') ? route('owner.adjustments') : '#'"
-                        :active="request()->routeIs('owner.adjustments')" wire:navigate>
-                        {{ __('Stock Approvals') }}
+                    <x-nav-link :href="route('owner.adjustments')" :active="request()->routeIs('owner.adjustments')"
+                        wire:navigate>
+                        {{ __('Stock Adjustment') }}
                     </x-nav-link>
                 </div>
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="auth()->user()->hasRole('owner') ? route('owner.audit') : '#'"
-                        :active="request()->routeIs('owner.audit')" wire:navigate>
-                        {{ __('Audit Log') }}
+                    <x-nav-link :href="route('owner.audit')" :active="request()->routeIs('owner.audit')" wire:navigate>
+                        {{ __('Stock Audit Log') }}
                     </x-nav-link>
                 </div>
+                @endrole
+
+                @role('manager')
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('manager.dashboard')" :active="request()->routeIs('manager.dashboard')"
+                        wire:navigate>
+                        {{ __('Dashboard') }}
+                    </x-nav-link>
+                </div>
+
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('manager.staff')" :active="request()->routeIs('manager.staff')"
+                        wire:navigate>
+                        {{ __('Staff Management') }}
+                    </x-nav-link>
+                </div>
+
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('manager.export')" :active="request()->routeIs('manager.export')"
+                        wire:navigate>
+                        {{ __('Export Center') }}
+                    </x-nav-link>
+                </div>
+
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('manager.finance')" :active="request()->routeIs('manager.finance')"
+                        wire:navigate>
+                        {{ __('Financial Summary') }}
+                    </x-nav-link>
+                </div>
+                @endrole
+
+                {{-- @role('supervisor')
+                @endrole
+
+                @role('cashier')
+                @endrole
+
+                @role('warehouse')
+                @endrole --}}
             </div>
 
             <!-- Settings Dropdown -->
@@ -116,7 +159,7 @@ new class extends Component {
                             <span class="dark:hidden">Mode Gelap</span>
                             <span class="hidden dark:block">Mode Terang</span>
                         </button>
-                        <x-dropdown-link :href="auth()->user()->hasRole('owner') ? route('owner.profile') : route('profile')" wire:navigate>
+                        <x-dropdown-link :href="route('profile')" wire:navigate>
                             {{ __('Profile') }}
                         </x-dropdown-link>
 

@@ -23,6 +23,38 @@ class UserSeeder extends Seeder
         ]);
         $owner->assignRole('owner');
 
+        $manager = User::create([
+            'name' => 'Asep',
+            'email' => 'asep@gmail.com',
+            'password' => Hash::make('asepasep'),
+            'branch_id' => 1,
+        ]);
+        $manager->assignRole('manager');
+
+        $supervisor = User::create([
+            'name' => 'Ujang',
+            'email' => 'ujang@gmail.com',
+            'password' => Hash::make('ujangujang'),
+            'branch_id' => 1,
+        ]);
+        $supervisor->assignRole('supervisor');
+
+        $cashier = User::create([
+            'name' => 'Mila',
+            'email' => 'mila@gmail.com',
+            'password' => Hash::make('milamila'),
+            'branch_id' => 1,
+        ]);
+        $cashier->assignRole('cashier');
+
+        $warehouse = User::create([
+            'name' => 'Dadang',
+            'email' => 'dadang@gmail.com',
+            'password' => Hash::make('dadangdadang'),
+            'branch_id' => 1,
+        ]);
+        $warehouse->assignRole('warehouse');
+
         $faker = Faker::create('id_ID');
         for ($i = 0; $i < 50; $i++) {
             $user = User::create([
