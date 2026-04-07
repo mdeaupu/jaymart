@@ -1,23 +1,35 @@
 <?php
 
-
+use App\Livewire\Manager\Dashboard as ManagerDashboard;
+use App\Livewire\Manager\ExportCenter;
+use App\Livewire\Manager\FinancialSummary;
+use App\Livewire\Manager\StaffManagement;
 use App\Livewire\Owner\BranchManagement;
-use App\Livewire\Owner\Dashboard;
+use App\Livewire\Owner\Dashboard as OwnerDashboard;
 use App\Livewire\Owner\MainTransactionReport;
 use App\Livewire\Owner\StockAudit;
 use App\Livewire\Owner\StockMonitor;
 use App\Livewire\Owner\UserManagement;
 use App\Livewire\Owner\StockAdjustmentIndex;
+
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 })->middleware('guest');
 
-Route::get('dashboard', function () {
-    if (auth()->user()->hasRole('owner')) {
+Route::get('/dashboard', function () {
+    $user = auth()->user();
+    if ($user->hasRole('owner'))
         return redirect()->route('owner.dashboard');
-    }
+    if ($user->hasRole('manager'))
+        return redirect()->route('manager.dashboard');
+    // if ($user->hasRole('supervisor'))
+    //     return redirect()->route('supervisor.dashboard');
+    // if ($user->hasRole('cashier'))
+    //     return redirect()->route('cashier.dashboard');
+    // if ($user->hasRole('warehouse'))
+    //     return redirect()->route('warehouse.dashboard');
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -25,18 +37,47 @@ Route::middleware(['auth', 'verified', 'role:owner'])
     ->prefix('owner')
     ->name('owner.')
     ->group(function () {
-
-        Route::get('/dashboard', Dashboard::class)->name('dashboard');
+        Route::get('/dashboard', OwnerDashboard::class)->name('dashboard');
         Route::get('/report', MainTransactionReport::class)->name('report.main');
-        Route::view('/profile', 'profile')->name('profile');
-
         Route::get('/users', UserManagement::class)->name('users');
         Route::get('/branches', BranchManagement::class)->name('branches');
-
         Route::get('/monitoring', StockMonitor::class)->name('monitoring');
         Route::get('/audit', StockAudit::class)->name('audit');
         Route::get('/adjustments', StockAdjustmentIndex::class)->name('adjustments');
+        Route::view('/profile', 'profile')->name('profile');
     });
+
+Route::middleware(['auth', 'verified', 'role:manager'])
+    ->prefix('manager')
+    ->name('manager.')
+    ->group(function () {
+        Route::get('/dashboard', ManagerDashboard::class)->name('dashboard');
+        Route::get('/staff', StaffManagement::class)->name('staff');
+        Route::get('/export', ExportCenter::class)->name('export');
+        Route::get('/finance', FinancialSummary::class)->name('finance');
+        Route::view('/profile', 'profile')->name('profile');
+    });
+
+// Route::middleware(['auth', 'verified', 'role:supervisor'])
+//     ->prefix('supervisor')
+//     ->name('supervisor.')
+//     ->group(function () {
+//         Route::get('/dashboard', SupervisorDashboard::class)->name('dashboard');
+//     });
+
+// Route::middleware(['auth', 'verified', 'role:cashier'])
+//     ->prefix('cashier')
+//     ->name('cashier.')
+//     ->group(function () {
+//         Route::get('/dashboard', CashierDashboard::class)->name('dashboard');
+//     });
+
+// Route::middleware(['auth', 'verified', 'role:warehouse'])
+//     ->prefix('warehouse')
+//     ->name('warehouse.')
+//     ->group(function () {
+//         Route::get('/dashboard', WarehouseDashboard::class)->name('dashboard');
+//     });
 
 Route::view('profile', 'profile')->middleware(['auth'])->name('profile');
 

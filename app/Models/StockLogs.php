@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\ScopesToBranch;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class StockLogs extends Model
 {
+    use ScopesToBranch;
+
     protected $fillable = ['branch_id', 'product_id', 'user_id', 'type', 'amount', 'reason'];
 
     public function user(): BelongsTo
