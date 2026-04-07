@@ -40,4 +40,14 @@ Route::middleware(['auth', 'verified', 'role:owner'])
 
 Route::view('profile', 'profile')->middleware(['auth'])->name('profile');
 
+use App\Livewire\Cashier\Pos;
+
+Route::middleware(['auth'])
+    ->prefix('cashier')
+    ->name('cashier.')
+    ->group(function () {
+
+        Route::get('/pos', Pos::class)->name('pos');
+    });
+
 require __DIR__ . '/auth.php';
