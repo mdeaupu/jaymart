@@ -108,14 +108,21 @@ new class extends Component {
                 </div>
                 @endrole
 
-                {{-- @role('supervisor')
+                @role('supervisor')
+                <div class="space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('supervisor.monitoring')" 
+                        :active="request()->routeIs('supervisor.monitoring')" 
+                        wire:navigate>
+                        {{ __('Real-Time Monitoring') }}
+                    </x-nav-link>
+                </div>
                 @endrole
 
                 @role('cashier')
                 @endrole
 
                 @role('warehouse')
-                @endrole --}}
+                @endrole
             </div>
 
             <!-- Settings Dropdown -->
