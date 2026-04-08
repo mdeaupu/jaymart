@@ -108,14 +108,25 @@ new class extends Component {
                 </div>
                 @endrole
 
-                {{-- @role('supervisor')
+                @role('supervisor')
                 @endrole
 
                 @role('cashier')
+            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                <x-nav-link :href="route('cashier.dashboard')" :active="request()->routeIs('cashier.dashboard')" wire:navigate>
+                {{ __('Dashboard') }}
+                    </x-nav-link>
+                            </div>
+
+                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                <x-nav-link :href="route('cashier.pos')" :active="request()->routeIs('cashier.pos')" wire:navigate>
+                 {{ __('Transaksi') }}
+                                    </x-nav-link>
+                                </div>
                 @endrole
 
                 @role('warehouse')
-                @endrole --}}
+                @endrole
             </div>
 
             <!-- Settings Dropdown -->
