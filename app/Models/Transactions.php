@@ -6,12 +6,15 @@ use App\Traits\ScopesToBranch;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use SoftDeletes;
 
 class Transactions extends Model
 {
     use ScopesToBranch;
 
     protected $fillable = ['branch_id', 'user_id', 'invoice_number', 'total_price'];
+
+    protected $table = 'transactions';
 
     public function branch(): BelongsTo
     {

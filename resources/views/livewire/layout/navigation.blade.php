@@ -116,6 +116,13 @@ new class extends Component {
                         {{ __('Real-Time Monitoring') }}
                     </x-nav-link>
                 </div>
+                <div class="space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('supervisor.void')" 
+                        :active="request()->routeIs('supervisor.void')" 
+                        wire:navigate>
+                        {{ __('Void Approval') }}
+                    </x-nav-link>
+                </div>
                 @endrole
 
                 @role('cashier')
