@@ -124,8 +124,32 @@ new class extends Component {
                                     </x-nav-link>
                                 </div>
                 @endrole
-
+                
                 @role('warehouse')
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('warehouse.dashboard')" :active="request()->routeIs('warehouse.dashboard')"
+                        wire:navigate>
+                        {{ __('Dashboard') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('warehouse.incoming')" :active="request()->routeIs('warehouse.incoming')"
+                        wire:navigate>
+                        {{ __('Incoming') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('warehouse.damaged')" :active="request()->routeIs('warehouse.damaged')"
+                        wire:navigate>
+                        {{ __('Damaged') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('warehouse.opname')" :active="request()->routeIs('warehouse.opname')"
+                        wire:navigate>
+                        {{ __('Opname') }}
+                    </x-nav-link>
+                </div>
                 @endrole
             </div>
 
