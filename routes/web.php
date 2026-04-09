@@ -11,6 +11,8 @@ use App\Livewire\Owner\StockAudit;
 use App\Livewire\Owner\StockMonitor;
 use App\Livewire\Owner\UserManagement;
 use App\Livewire\Owner\StockAdjustmentIndex;
+use App\Livewire\Cashier\Dashboard as CashierDashboard;
+use App\Livewire\Cashier\Pos;
 
 use App\Livewire\Warehouse\BlindOpname;
 use App\Livewire\Warehouse\DamagedExpired;
@@ -30,8 +32,8 @@ Route::get('/dashboard', function () {
         return redirect()->route('manager.dashboard');
     // if ($user->hasRole('supervisor'))
     //     return redirect()->route('supervisor.dashboard');
-    // if ($user->hasRole('cashier'))
-    //     return redirect()->route('cashier.dashboard');
+    if ($user->hasRole('cashier'))
+        return redirect()->route('cashier.dashboard');
     if ($user->hasRole('warehouse'))
         return redirect()->route('warehouse.dashboard');
     return view('dashboard');
@@ -75,6 +77,14 @@ Route::middleware(['auth', 'verified', 'role:manager'])
 //     ->group(function () {
 //         Route::get('/dashboard', CashierDashboard::class)->name('dashboard');
 //     });
+Route::middleware(['auth', 'verified', 'role:cashier'])
+    ->prefix('cashier')
+    ->name('cashier.')
+    ->group(function () {
+
+        Route::get('/dashboard', CashierDashboard::class)->name('dashboard'); 
+        Route::get('/pos', Pos::class)->name('pos');
+    });
 
 Route::middleware(['auth', 'verified', 'role:warehouse'])
     ->prefix('warehouse')
