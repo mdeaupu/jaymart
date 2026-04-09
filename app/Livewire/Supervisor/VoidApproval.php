@@ -36,17 +36,12 @@ class VoidApproval extends Component
 
     public function render()
     {
-        $requests = ApprovalRequest::select(
-            'id',
-            'transaction_id',
-            'status',
-            'type'
-        )
-        ->where('type', 'void')
-        ->where('status', 'pending')
-        ->latest()
-        ->get();
-
+        $requests = ApprovalRequest::with(['transaction', 'requester'])
+            ->where('type', 'void')
+            ->where('status', 'pending')
+            ->latest()
+            ->get();
+            
         return view('livewire.supervisor.void-approval', compact('requests'));
     }
 }
