@@ -13,7 +13,12 @@ use App\Livewire\Owner\StockMonitor;
 use App\Livewire\Owner\UserManagement;
 use App\Livewire\Owner\StockAdjustmentIndex;
 use App\Livewire\Supervisor\RealtimeMonitoring;
-
+use App\Livewire\Cashier\Dashboard as CashierDashboard;
+use App\Livewire\Cashier\Pos;
+use App\Livewire\Warehouse\BlindOpname;
+use App\Livewire\Warehouse\DamagedExpired;
+use App\Livewire\Warehouse\Dashboard as WarehosueDashboard;
+use App\Livewire\Warehouse\IncomingGoods;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -28,10 +33,10 @@ Route::get('/dashboard', function () {
         return redirect()->route('manager.dashboard');
     if ($user->hasRole('supervisor'))
         return redirect()->route('supervisor.dashboard');
-    // if ($user->hasRole('cashier'))
-    //     return redirect()->route('cashier.dashboard');
-    // if ($user->hasRole('warehouse'))
-    //     return redirect()->route('warehouse.dashboard');
+    if ($user->hasRole('cashier'))
+        return redirect()->route('cashier.dashboard');
+    if ($user->hasRole('warehouse'))
+        return redirect()->route('warehouse.dashboard');
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -69,19 +74,25 @@ Route::middleware(['auth', 'verified', 'role:supervisor'])
         ->name('monitoring');
     });
 
-// Route::middleware(['auth', 'verified', 'role:cashier'])
-//     ->prefix('cashier')
-//     ->name('cashier.')
-//     ->group(function () {
-//         Route::get('/dashboard', CashierDashboard::class)->name('dashboard');
-//     });
 
-// Route::middleware(['auth', 'verified', 'role:warehouse'])
-//     ->prefix('warehouse')
-//     ->name('warehouse.')
-//     ->group(function () {
-//         Route::get('/dashboard', WarehouseDashboard::class)->name('dashboard');
-//     });
+Route::middleware(['auth', 'verified', 'role:cashier'])
+    ->prefix('cashier')
+    ->name('cashier.')
+    ->group(function () {
+
+        Route::get('/dashboard', CashierDashboard::class)->name('dashboard'); 
+        Route::get('/pos', Pos::class)->name('pos');
+    });
+
+Route::middleware(['auth', 'verified', 'role:warehouse'])
+    ->prefix('warehouse')
+    ->name('warehouse.')
+    ->group(function () {
+        Route::get('/dashboard', WarehosueDashboard::class)->name('dashboard');
+        Route::get('/incoming', IncomingGoods::class)->name('incoming');
+        Route::get('/opname', BlindOpname::class)->name('opname');
+        Route::get('/damaged', DamagedExpired::class)->name('damaged');
+    });
 
 Route::view('profile', 'profile')->middleware(['auth'])->name('profile');
 
