@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\ScopesToBranch;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class StockAdjustments extends Model
 {
+    use ScopesToBranch;
+
     protected $fillable = [
         'branch_id',
         'product_id',
