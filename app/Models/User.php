@@ -56,10 +56,14 @@ class User extends Authenticatable
 
     public function dashboardUrl(): string
     {
+        $role = $this->getRoleNames()->first();
+
+        if (!$role) return route('login');
+        
         return match ($this->role) {
             'owner' => route('owner.dashboard'),
             // 'manager' => route('manager.dashboard'),
-            // 'supervisor' => route('supervisor.dashboard'),
+            'supervisor' => route('supervisor.dashboard'),
             // 'cashier' => route('cashier.dashboard'),
             // 'warehouse' => route('warehouse.dashboard'),
             default => route('login'),

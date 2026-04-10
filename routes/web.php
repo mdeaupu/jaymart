@@ -13,6 +13,7 @@ use App\Livewire\Owner\StockMonitor;
 use App\Livewire\Owner\UserManagement;
 use App\Livewire\Owner\StockAdjustmentIndex;
 use App\Livewire\Supervisor\RealtimeMonitoring;
+use App\Livewire\Supervisor\VoidApproval;
 use App\Livewire\Cashier\Dashboard as CashierDashboard;
 use App\Livewire\Cashier\Pos;
 use App\Livewire\Warehouse\BlindOpname;
@@ -71,7 +72,8 @@ Route::middleware(['auth', 'verified', 'role:supervisor'])
     ->group(function () {
         Route::get('/dashboard', SupervisorDashboard::class)->name('dashboard');
         Route::get('/monitoring', RealtimeMonitoring::class)
-        ->name('monitoring');
+            ->name('monitoring');
+        Route::get('/void-approval', VoidApproval::class)->name('void');
     });
 
 
