@@ -32,7 +32,7 @@
                         <th style="padding:12px; text-align:center; width:60px;">No</th>
                         <th style="padding:12px; text-align:left;">Nama</th>
                         <th style="padding:12px; text-align:left; width:180px;">Harga</th>
-                        <th style="padding:12px; text-align:left; width:100px;">Stok</th>
+                        <th style="padding:12px; text-align:center; width:100px;">Stok</th>
                         <th style="padding:12px; text-align:center; width:100px;">Aksi</th>
                     </tr>
                 </thead>
