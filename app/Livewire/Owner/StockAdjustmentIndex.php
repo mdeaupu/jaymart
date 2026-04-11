@@ -54,4 +54,21 @@ class StockAdjustmentIndex extends Component
 
         session()->flash('message', 'Stok berhasil diperbarui dan dicatat dalam log.');
     }
+
+    public function rejectAdjustment($id)
+    {
+        $adj = StockAdjustments::findOrFail($id);
+
+        if ($adj->status !== 'pending') {
+            session()->flash('error', 'Permintaan ini sudah diproses.');
+            return;
+        }
+
+        $adj->update([
+            'status' => 'rejected',
+            'approved_by' => auth()->id()
+        ]);
+
+        session()->flash('message', 'Permintaan ditolak.');
+    }
 }
