@@ -4,10 +4,21 @@ namespace App\Livewire\Supervisor;
 
 use Livewire\Component;
 use App\Models\StockAdjustments;
+use App\Models\AuditLog;
 use Illuminate\Support\Facades\DB;
 
 class StockAdjustmentApproval extends Component
 {
+
+    public function logActivity($action, $description, $branchId = null)
+    {
+        \App\Models\AuditLog::create([
+            'user_id' => auth()->id(),
+            'branch_id' => $branchId,
+            'action' => $action,
+            'description' => $description,
+        ]);
+    }
 
     public function approve($id)
     {
@@ -41,6 +52,12 @@ class StockAdjustmentApproval extends Component
                 ]);
             });
 
+            $this->logActivity(
+                'approve_adjustment',
+                'Approve stock adjustment produk: ' . $adjustment->product->name,
+                $adjustment->branch_id
+            );
+
             session()->flash('message', 'Adjustment berhasil di-approve');
 
         } catch (\Exception $e) {
@@ -60,6 +77,12 @@ class StockAdjustmentApproval extends Component
             'status' => 'rejected',
             'approved_by' => auth()->id(),
         ]);
+
+        $this->logActivity(
+            'reject_adjustment',
+            'Reject stock adjustment produk: ' . $adjustment->product->name,
+            $adjustment->branch_id
+        );
 
         session()->flash('message', 'Adjustment ditolak');
     }
