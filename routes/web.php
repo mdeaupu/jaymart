@@ -13,6 +13,7 @@ use App\Livewire\Owner\UserManagement;
 use App\Livewire\Owner\StockAdjustmentIndex;
 use App\Livewire\Cashier\Dashboard as CashierDashboard;
 use App\Livewire\Cashier\Pos;
+use App\Models\Transactions;
 
 use App\Livewire\Warehouse\BlindOpname;
 use App\Livewire\Warehouse\DamagedExpired;
@@ -84,7 +85,12 @@ Route::middleware(['auth', 'verified', 'role:cashier'])
 
         Route::get('/dashboard', CashierDashboard::class)->name('dashboard'); 
         Route::get('/pos', Pos::class)->name('pos');
-    });
+
+Route::get('/receipt/{transaction}', function (Transactions $transaction) {
+    return view('livewire.cashier.receipt', compact('transaction'));
+})->name('receipt');
+});
+    
 
 Route::middleware(['auth', 'verified', 'role:warehouse'])
     ->prefix('warehouse')
