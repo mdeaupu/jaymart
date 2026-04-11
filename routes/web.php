@@ -6,11 +6,14 @@ use App\Livewire\Manager\FinancialSummary;
 use App\Livewire\Manager\StaffManagement;
 use App\Livewire\Owner\BranchManagement;
 use App\Livewire\Owner\Dashboard as OwnerDashboard;
+use App\Livewire\Owner\Dashboard as SupervisorDashboard;
 use App\Livewire\Owner\MainTransactionReport;
 use App\Livewire\Owner\StockAudit;
 use App\Livewire\Owner\StockMonitor;
 use App\Livewire\Owner\UserManagement;
 use App\Livewire\Owner\StockAdjustmentIndex;
+use App\Livewire\Supervisor\RealtimeMonitoring;
+use App\Livewire\Supervisor\VoidApproval;
 use App\Livewire\Cashier\Dashboard as CashierDashboard;
 use App\Livewire\Cashier\Pos;
 use App\Models\Transactions;
@@ -32,8 +35,8 @@ Route::get('/dashboard', function () {
         return redirect()->route('owner.dashboard');
     if ($user->hasRole('manager'))
         return redirect()->route('manager.dashboard');
-    // if ($user->hasRole('supervisor'))
-    //     return redirect()->route('supervisor.dashboard');
+    if ($user->hasRole('supervisor'))
+        return redirect()->route('supervisor.dashboard');
     if ($user->hasRole('cashier'))
         return redirect()->route('cashier.dashboard');
     if ($user->hasRole('warehouse'))
@@ -66,19 +69,17 @@ Route::middleware(['auth', 'verified', 'role:manager'])
         Route::view('/profile', 'profile')->name('profile');
     });
 
-// Route::middleware(['auth', 'verified', 'role:supervisor'])
-//     ->prefix('supervisor')
-//     ->name('supervisor.')
-//     ->group(function () {
-//         Route::get('/dashboard', SupervisorDashboard::class)->name('dashboard');
-//     });
+Route::middleware(['auth', 'verified', 'role:supervisor'])
+    ->prefix('supervisor')
+    ->name('supervisor.')
+    ->group(function () {
+        Route::get('/dashboard', SupervisorDashboard::class)->name('dashboard');
+        Route::get('/monitoring', RealtimeMonitoring::class)
+            ->name('monitoring');
+        Route::get('/void-approval', VoidApproval::class)->name('void');
+    });
 
-// Route::middleware(['auth', 'verified', 'role:cashier'])
-//     ->prefix('cashier')
-//     ->name('cashier.')
-//     ->group(function () {
-//         Route::get('/dashboard', CashierDashboard::class)->name('dashboard');
-//     });
+
 Route::middleware(['auth', 'verified', 'role:cashier'])
     ->prefix('cashier')
     ->name('cashier.')
