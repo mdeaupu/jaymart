@@ -123,6 +123,20 @@ new class extends Component {
                         {{ __('Void Approval') }}
                     </x-nav-link>
                 </div>
+                <div class="space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('supervisor.stock')" 
+                        :active="request()->routeIs('supervisor.stock')" 
+                        wire:navigate>
+                        {{ __('Stock Adjusment Approval') }}
+                    </x-nav-link>
+                </div>
+                <div class="space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('supervisor.audit')" 
+                        :active="request()->routeIs('supervisor.audit')" 
+                        wire:navigate>
+                        {{ __('Audit Trail Viewer') }}
+                    </x-nav-link>
+                </div>
                 @endrole
 
                 @role('cashier')
