@@ -151,6 +151,11 @@ new class extends Component {
                  {{ __('Transaksi') }}
                                     </x-nav-link>
                                 </div>
+                                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                <x-nav-link :href="route('cashier.report')" :active="request()->routeIs('cashier.report')" wire:navigate>
+                 {{ __('Laporan') }}
+                                    </x-nav-link>
+                                </div>
                 @endrole
                 
                 @role('warehouse')

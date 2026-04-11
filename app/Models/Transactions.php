@@ -12,7 +12,7 @@ class Transactions extends Model
 {
     use ScopesToBranch;
 
-    protected $fillable = ['branch_id', 'user_id', 'invoice_number', 'total_price'];
+    protected $fillable = ['branch_id', 'user_id', 'invoice_number', 'total_price', 'shift'];
 
     protected $table = 'transactions';
 
@@ -30,4 +30,10 @@ class Transactions extends Model
     {
         return $this->hasMany(TransactionsDetail::class, 'transaction_id');
     }
+    protected static function booted()
+{
+    static::creating(function ($transaction) {
+        $transaction->invoice_number = 'INV-' . now()->format('YmdHis');
+    });
+}
 }
