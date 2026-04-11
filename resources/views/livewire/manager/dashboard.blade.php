@@ -3,17 +3,18 @@
 </x-slot>
 
 <div class="py-10 mx-auto sm:px-6 lg:px-8">
-    <div class="mb-6">
-        <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100">Ringkasan Operasional Hari Ini</h2>
-        <p class="text-sm text-gray-600 dark:text-gray-400">Pantau performa penjualan dan stok barang secara langsung.
-        </p>
+    <div class="mb-2 py-2">
+        <div class="h-11 flex items-center">
+            <p class="text-sm text-gray-800 dark:text-gray-400">Pantau performa penjualan dan stok barang secara
+                langsung.</p>
+        </div>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <x-stat-card title="Total Omzet Hari Ini" colorClass="border-blue-500">
+        <x-stat-card title="Total Omzet Hari Ini" colorClass="border-green-500">
             Rp {{ number_format($totalOmzet, 0, ',', '.') }}
         </x-stat-card>
-        <x-stat-card title="Transaksi Hari Ini" colorClass="border-green-500">
+        <x-stat-card title="Transaksi Hari Ini" colorClass="border-indigo-500">
             {{ $totalTransactions }} Transaksi
         </x-stat-card>
         <x-stat-card title="Produk Stok Rendah" colorClass="border-red-500">
@@ -36,26 +37,39 @@
                     <th class="px-6 py-3 text-left text-sm font-semibold text-gray-800 dark:text-gray-400">Produk</th>
                     <th class="px-6 py-3 text-right text-sm font-semibold text-gray-800 dark:text-gray-400">Sisa</th>
                 </x-slot>
-                @foreach($lowStocks as $stock)
+
+                @forelse($lowStocks as $stock)
                     <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                        <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-100">{{ $stock->product->name }}</td>
+                        <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-gray-100">
+                            {{ $stock->product->name }}
+                        </td>
                         <td class="px-6 py-4 text-sm text-right font-bold text-red-600 dark:text-red-400">
                             {{ $stock->quantity }}
                         </td>
                     </tr>
-                @endforeach
+                @empty
+                    <tr>
+                        <td colspan="2" class="px-2 py-8 text-center text-sm text-gray-500 italic">Tidak ada stok rendah.
+                        </td>
+                    </tr>
+                @endforelse
             </x-table>
         </x-card>
 
         <x-card class="p-6">
-            <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-6">5 Produk Terlaris (Hari Ini)</h3>
+            <h3 class="text-lg font-bold text-gray-800 dark:text-gray-400 mb-6">5 Produk Terlaris (Hari Ini)</h3>
             <ul class="space-y-4">
-                @foreach($bestSellers as $item)
-                    <li class="flex justify-between items-center p-3 rounded-lg bg-gray-50 dark:bg-gray-800">
-                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ $item->product->name }}</span>
+                @forelse($bestSellers as $item)
+                    <li
+                        class="flex justify-between items-center p-3 rounded-lg bg-gray-50 dark:bg-gray-700/50 border border-transparent hover:border-indigo-300 transition-all">
+                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                            {{ $item->product->name }}
+                        </span>
                         <x-badge color="indigo">{{ $item->total_sold }} Terjual</x-badge>
                     </li>
-                @endforeach
+                @empty
+                    <li class="p-3 text-center text-sm text-gray-500 italic">Belum ada transaksi hari ini.</li>
+                @endforelse
             </ul>
         </x-card>
     </div>

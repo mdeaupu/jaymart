@@ -3,81 +3,95 @@
 </x-slot>
 
 <div class="py-10 mx-auto sm:px-6 lg:px-8" x-data="{ openModal: false }">
-    <x-card class="p-6">
-        <div class="flex justify-between items-center mb-8">
-            <div>
-                <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100">Kelola Staff Cabang</h2>
-                <p class="text-sm text-gray-500 dark:text-gray-400">Manajemen akun akses kasir dan supervisor.</p>
-            </div>
-            <button @click="openModal = true" wire:click="$set('userId', null)"
-                class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-lg text-sm font-bold shadow-sm transition">
-                + Tambah Staff
+    <x-alert type="success" :message="session('message')" />
+    <x-alert type="error" :message="session('error')" />
+    <div class="mb-2 py-2">
+        <div class="h-11 items-center flex justify-between">
+            <p class="text-sm text-gray-800 dark:text-gray-400">Manajemen akun akses kasir dan supervisor.</p>
+            <button wire:click="create"
+                class="inline-flex items-center px-5 py-2.5 bg-gray-600 border border-transparent rounded-lg font-medium text-sm text-white tracking-wide hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-offset-2 shadow-md active:scale-95 transition-all duration-200">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                </svg>
+                Tambah Staff
             </button>
         </div>
+    </div>
 
-        <x-table>
-            <x-slot name="header">
-                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-800 dark:text-gray-400">Nama</th>
-                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-800 dark:text-gray-400">Email</th>
-                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-800 dark:text-gray-400">Role</th>
-                <th class="px-6 py-3 text-right text-sm font-semibold text-gray-800 dark:text-gray-400">Aksi</th>
-            </x-slot>
+    <x-card>
+        <div class="p-6">
+            <x-table>
+                <x-slot name="header">
+                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-800 dark:text-gray-400">Nama</th>
+                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-800 dark:text-gray-400">Email</th>
+                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-800 dark:text-gray-400">Role</th>
+                    <th class="px-6 py-3 text-center text-sm font-semibold text-gray-800 dark:text-gray-400">Aksi</th>
+                </x-slot>
 
-            @foreach($staff as $member)
-                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                    <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-gray-100">{{ $member->name }}</td>
-                    <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">{{ $member->email }}</td>
-                    <td class="px-6 py-4 text-sm">
-                        <x-badge color="gray">{{ $member->getRoleNames()->first() }}</x-badge>
-                    </td>
-                    <td class="px-6 py-4 text-right">
-                        <button wire:click="edit({{ $member->id }})" @click="openModal = true"
-                            class="text-indigo-600 hover:text-indigo-900 font-bold text-sm">Edit</button>
-                    </td>
-                </tr>
-            @endforeach
-        </x-table>
+                @forelse($staff as $member)
+                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-200">
+                        <td class="px-6 py-4">
+                            <div class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ $member->name }}</div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="text-xs text-gray-400">{{ $member->email }}</div>
+                        </td>
+                        <td class="px-6 py-4 text-sm capitalize">
+                            <x-badge color="indigo">{{ $member->getRoleNames()->first() }}</x-badge>
+                        </td>
+                        <td class="px-6 py-4 space-x-3 text-center">
+                            <button wire:click="edit({{ $member->id }})" @click="openModal = true"
+                                class="inline-flex items-center px-3 py-1.5 bg-indigo-50 text-indigo-700 rounded-lg text-sm font-semibold hover:bg-indigo-100 hover:text-indigo-800 transition-colors duration-200">
+                                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                                    </path>
+                                </svg>
+                                Edit
+                            </button>
+
+                            <button wire:click="confirmDelete({{ $member->id }})"
+                                class="inline-flex items-center px-3 py-1.5 bg-red-50 text-red-700 rounded-lg text-sm font-semibold hover:bg-red-100 hover:text-red-800 transition-colors duration-200">
+                                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                    </path>
+                                </svg>
+                                Hapus
+                            </button>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="4" class="px-6 py-8 text-center text-sm text-gray-500 italic">Tidak ada data staff.
+                        </td>
+                    </tr>
+                @endforelse
+            </x-table>
+        </div>
     </x-card>
 
-    <div x-show="openModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
-        x-cloak>
-        <div class="bg-white dark:bg-gray-800 rounded-xl w-full max-w-md p-8 shadow-2xl">
-            <h3 class="text-xl font-bold mb-6 dark:text-white">{{ $userId ? 'Edit Staff' : 'Tambah Staff Baru' }}</h3>
-            <form wire:submit.prevent="store">
-                <div class="space-y-5">
-                    <div>
-                        <label class="block text-sm font-medium dark:text-gray-300 mb-1">Nama Lengkap</label>
-                        <input type="text" wire:model="name"
-                            class="w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 rounded-lg">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium dark:text-gray-300 mb-1">Email</label>
-                        <input type="email" wire:model="email"
-                            class="w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 rounded-lg">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium dark:text-gray-300 mb-1">Password</label>
-                        <input type="password" wire:model="password" placeholder="Kosongkan jika tidak diganti"
-                            class="w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 rounded-lg">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium dark:text-gray-300 mb-1">Role Jabatan</label>
-                        <select wire:model="role"
-                            class="w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 rounded-lg">
-                            <option value="">Pilih Role</option>
-                            @foreach($availableRoles as $r)
-                                <option value="{{ $r->name }}">{{ $r->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+    @if($isOpen) @include('livewire.manager.staff-modal') @endif
+
+    @if($confirmingStaffDeletion)
+        <x-modal-card wire:model.live="confirmingStaffDeletion" maxWidth="sm">
+            <div class="p-8 text-center">
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">Hapus Staff?</h3>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">Akses akun ini akan dicabut secara permanen.</p>
+
+                <div class="flex gap-3">
+                    <button type="button" wire:click="$set('confirmingStaffDeletion', false)"
+                        class="flex-1 px-4 py-3 text-gray-800 font-bold bg-gray-100 hover:bg-gray-200 rounded-xl transition-all active:scale-[0.98]">
+                        Batal
+                    </button>
+
+                    <button type="button" wire:click="delete" wire:loading.attr="disabled"
+                        class="flex-1 px-4 py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold disabled:opacity-50 transition-all active:scale-[0.98]">
+                        <span wire:loading.remove wire:target="delete">Hapus</span>
+                        <span wire:loading wire:target="delete">Proses...</span>
+                    </button>
                 </div>
-                <div class="mt-8 flex justify-end space-x-4">
-                    <button type="button" @click="openModal = false"
-                        class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 font-medium">Batal</button>
-                    <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-lg font-bold shadow-lg"
-                        @click="openModal = false">Simpan Perubahan</button>
-                </div>
-            </form>
-        </div>
-    </div>
+            </div>
+        </x-modal-card>
+    @endif
 </div>
