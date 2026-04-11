@@ -27,4 +27,10 @@ class Transactions extends Model
     {
         return $this->hasMany(TransactionsDetail::class, 'transaction_id');
     }
+    protected static function booted()
+{
+    static::creating(function ($transaction) {
+        $transaction->invoice_number = 'INV-' . now()->format('YmdHis');
+    });
+}
 }
