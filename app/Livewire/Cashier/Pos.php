@@ -112,7 +112,9 @@ DB::transaction(function () use (&$transaction) {
     $transaction = Transactions::create([
         'branch_id' => auth()->user()->branch_id,
         'user_id' => auth()->id(),
-        'total_price' => $this->total
+        'total_price' => $this->total,
+        'shift' => $this->getShift()
+
     ]);
 
     foreach ($this->cart as $item) {
@@ -135,5 +137,14 @@ DB::transaction(function () use (&$transaction) {
 session()->flash('success', 'Transaksi berhasil!');
 
 return redirect()->route('cashier.receipt', $transaction->id);
+}
+
+public function getShift()
+{
+    $hour = now()->format('H');
+
+    if ($hour >= 6 && $hour < 14) return 'Pagi';
+    if ($hour >= 14 && $hour < 22) return 'Siang';
+    return 'Malam';
 }
 }

@@ -11,7 +11,7 @@ class Transactions extends Model
 {
     use ScopesToBranch;
 
-    protected $fillable = ['branch_id', 'user_id', 'invoice_number', 'total_price'];
+    protected $fillable = ['branch_id', 'user_id', 'invoice_number', 'total_price', 'shift'];
 
     public function branch(): BelongsTo
     {

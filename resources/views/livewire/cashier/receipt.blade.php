@@ -16,7 +16,7 @@
     <!-- INFO TRANSAKSI -->
     <div style="margin-top:5px;">
         No: {{ $transaction->invoice_number }}<br>
-        Tgl: {{ $transaction->created_at->format('d-m-Y') }}<br>
+        Tgl: {{ $transaction->created_at->format('d-m-Y H:i') }}<br>
         Kasir: {{ $transaction->user->name ?? '-' }}
     </div>
 
