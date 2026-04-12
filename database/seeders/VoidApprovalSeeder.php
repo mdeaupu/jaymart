@@ -16,12 +16,19 @@ class VoidApprovalSeeder extends Seeder
     public function run(): void
     {
         $user = User::first();
+
+        if (!$user) {
+            $this->command->error("User tidak ditemukan! Jalankan UserSeeder terlebih dahulu.");
+            return;
+        }
+
         for ($i = 0; $i < 5; $i++) {
             $transaction = Transactions::create([
                 'branch_id' => 1,
                 'user_id' => $user->id,
                 'invoice_number' => 'INV-' . rand(1000, 9999),
                 'total_price' => rand(10000, 50000),
+                'shift' => 'Pagi',
             ]);
 
             ApprovalRequest::create([

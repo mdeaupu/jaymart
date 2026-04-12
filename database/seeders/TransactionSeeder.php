@@ -20,6 +20,7 @@ class TransactionSeeder extends Seeder
                 'user_id' => $faker->numberBetween(1, 50),
                 'invoice_number' => 'INV-' . strtoupper($faker->bothify('??###')),
                 'total_price' => 0,
+                'shift' => $faker->randomElement(['Pagi', 'Siang', 'Malam']),
             ]);
 
             $totalRunning = 0;
