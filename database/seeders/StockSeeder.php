@@ -16,6 +16,7 @@ class StockSeeder extends Seeder
                     'branch_id' => $b,
                     'product_id' => $p,
                     'quantity' => rand(50, 200),
+                    'expired_at' => now()->addDays(10),
                     'low_stock_threshold' => 10,
                     'created_at' => now(),
                     'updated_at' => now(),

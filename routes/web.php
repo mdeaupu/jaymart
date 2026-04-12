@@ -4,6 +4,10 @@ use App\Livewire\Manager\Dashboard as ManagerDashboard;
 use App\Livewire\Manager\ExportCenter;
 use App\Livewire\Manager\FinancialSummary;
 use App\Livewire\Manager\StaffManagement;
+use App\Livewire\Manager\StockAdjustmentCreate;
+use App\Livewire\Manager\StockAdjustmentHistory;
+use App\Livewire\Manager\StockPurchaseCreate;
+use App\Livewire\Manager\StockPurchaseHistory;
 use App\Livewire\Owner\BranchManagement;
 use App\Livewire\Owner\Dashboard as OwnerDashboard;
 use App\Livewire\Owner\Dashboard as SupervisorDashboard;
@@ -68,6 +72,10 @@ Route::middleware(['auth', 'verified', 'role:manager'])
         Route::get('/staff', StaffManagement::class)->name('staff');
         Route::get('/export', ExportCenter::class)->name('export');
         Route::get('/finance', FinancialSummary::class)->name('finance');
+        Route::get('/stockadjustmentcreate', StockAdjustmentCreate::class)->name('stockadjustmentcreate');
+        Route::get('/stockadjustmenthistory', StockAdjustmentHistory::class)->name('stockadjustmenthistory');
+        Route::get('/stockpurchase', StockPurchaseCreate::class)->name('stockpurchase');
+        Route::get('/stockpurchasehistory', StockPurchaseHistory::class)->name('stockpurchasehistory');
         Route::view('/profile', 'profile')->name('profile');
     });
 
@@ -89,15 +97,15 @@ Route::middleware(['auth', 'verified', 'role:cashier'])
     ->name('cashier.')
     ->group(function () {
 
-        Route::get('/dashboard', CashierDashboard::class)->name('dashboard'); 
+        Route::get('/dashboard', CashierDashboard::class)->name('dashboard');
         Route::get('/pos', Pos::class)->name('pos');
 
-Route::get('/receipt/{transaction}', function (Transactions $transaction) {
-    return view('livewire.cashier.receipt', compact('transaction'));
-})->name('receipt');
-Route::get('/report', Report::class)->name('report');
-});
-    
+        Route::get('/receipt/{transaction}', function (Transactions $transaction) {
+            return view('livewire.cashier.receipt', compact('transaction'));
+        })->name('receipt');
+        Route::get('/report', Report::class)->name('report');
+    });
+
 
 Route::middleware(['auth', 'verified', 'role:warehouse'])
     ->prefix('warehouse')
