@@ -94,6 +94,34 @@ new class extends Component {
                 </div>
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('manager.stockadjustmentcreate')"
+                        :active="request()->routeIs('manager.stockadjustmentcreate')" wire:navigate>
+                        {{ __('Stock Adjustment') }}
+                    </x-nav-link>
+                </div>
+
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('manager.stockadjustmenthistory')"
+                        :active="request()->routeIs('manager.stockadjustmenthistory')" wire:navigate>
+                        {{ __('Stock Adjustment History') }}
+                    </x-nav-link>
+                </div>
+
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('manager.stockpurchase')"
+                        :active="request()->routeIs('manager.stockpurchase')" wire:navigate>
+                        {{ __('Stock Purchase') }}
+                    </x-nav-link>
+                </div>
+
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('manager.stockpurchasehistory')"
+                        :active="request()->routeIs('manager.stockpurchasehistory')" wire:navigate>
+                        {{ __('Stock Purchase History') }}
+                    </x-nav-link>
+                </div>
+
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('manager.export')" :active="request()->routeIs('manager.export')"
                         wire:navigate>
                         {{ __('Export Center') }}
@@ -110,29 +138,25 @@ new class extends Component {
 
                 @role('supervisor')
                 <div class="space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('supervisor.monitoring')" 
-                        :active="request()->routeIs('supervisor.monitoring')" 
-                        wire:navigate>
+                    <x-nav-link :href="route('supervisor.monitoring')"
+                        :active="request()->routeIs('supervisor.monitoring')" wire:navigate>
                         {{ __('Real-Time Monitoring') }}
                     </x-nav-link>
                 </div>
                 <div class="space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('supervisor.void')" 
-                        :active="request()->routeIs('supervisor.void')" 
+                    <x-nav-link :href="route('supervisor.void')" :active="request()->routeIs('supervisor.void')"
                         wire:navigate>
                         {{ __('Void Approval') }}
                     </x-nav-link>
                 </div>
                 <div class="space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('supervisor.stock')" 
-                        :active="request()->routeIs('supervisor.stock')" 
+                    <x-nav-link :href="route('supervisor.stock')" :active="request()->routeIs('supervisor.stock')"
                         wire:navigate>
                         {{ __('Stock Adjusment Approval') }}
                     </x-nav-link>
                 </div>
                 <div class="space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('supervisor.audit')" 
-                        :active="request()->routeIs('supervisor.audit')" 
+                    <x-nav-link :href="route('supervisor.audit')" :active="request()->routeIs('supervisor.audit')"
                         wire:navigate>
                         {{ __('Audit Trail Viewer') }}
                     </x-nav-link>
@@ -140,24 +164,26 @@ new class extends Component {
                 @endrole
 
                 @role('cashier')
-            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                <x-nav-link :href="route('cashier.dashboard')" :active="request()->routeIs('cashier.dashboard')" wire:navigate>
-                {{ __('Dashboard') }}
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('cashier.dashboard')" :active="request()->routeIs('cashier.dashboard')"
+                        wire:navigate>
+                        {{ __('Dashboard') }}
                     </x-nav-link>
-                            </div>
+                </div>
 
-                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <x-nav-link :href="route('cashier.pos')" :active="request()->routeIs('cashier.pos')" wire:navigate>
-                 {{ __('Transaksi') }}
-                                    </x-nav-link>
-                                </div>
-                                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <x-nav-link :href="route('cashier.report')" :active="request()->routeIs('cashier.report')" wire:navigate>
-                 {{ __('Laporan') }}
-                                    </x-nav-link>
-                                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('cashier.pos')" :active="request()->routeIs('cashier.pos')" wire:navigate>
+                        {{ __('Transaksi') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('cashier.report')" :active="request()->routeIs('cashier.report')"
+                        wire:navigate>
+                        {{ __('Laporan') }}
+                    </x-nav-link>
+                </div>
                 @endrole
-                
+
                 @role('warehouse')
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('warehouse.dashboard')" :active="request()->routeIs('warehouse.dashboard')"
