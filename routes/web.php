@@ -12,6 +12,7 @@ use App\Livewire\Owner\BranchManagement;
 use App\Livewire\Owner\Dashboard as OwnerDashboard;
 use App\Livewire\Owner\Dashboard as SupervisorDashboard;
 use App\Livewire\Owner\MainTransactionReport;
+use App\Livewire\Owner\StockApproval;
 use App\Livewire\Owner\StockAudit;
 use App\Livewire\Owner\StockMonitor;
 use App\Livewire\Owner\UserManagement;
@@ -61,6 +62,7 @@ Route::middleware(['auth', 'verified', 'role:owner'])
         Route::get('/monitoring', StockMonitor::class)->name('monitoring');
         Route::get('/audit', StockAudit::class)->name('audit');
         Route::get('/adjustments', StockAdjustmentIndex::class)->name('adjustments');
+        Route::get('/approval', StockApproval::class)->name('approval');
         Route::view('/profile', 'profile')->name('profile');
     });
 

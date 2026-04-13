@@ -41,7 +41,7 @@ class StockAdjustmentIndex extends Component
         StockLogs::create([
             'branch_id' => $adj->branch_id,
             'product_id' => $adj->product_id,
-            'user_id' => auth()->id(), // Mencatat siapa yang menyetujui (Owner/Pak Jayusman)
+            'user_id' => auth()->id(),
             'type' => $adj->adjustment_amount > 0 ? 'in' : 'out',
             'amount' => abs($adj->adjustment_amount),
             'reason' => "Adjustment Approved: " . $adj->reason,

@@ -72,6 +72,13 @@ new class extends Component {
                 </div>
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('owner.approval')" :active="request()->routeIs('owner.approval')"
+                        wire:navigate>
+                        {{ __('Stock Approval') }}
+                    </x-nav-link>
+                </div>
+
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('owner.audit')" :active="request()->routeIs('owner.audit')" wire:navigate>
                         {{ __('Stock Audit Log') }}
                     </x-nav-link>

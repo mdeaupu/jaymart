@@ -14,7 +14,10 @@ class StockPurchase extends Model
         'quantity',
         'total_price',
         'invoice_number',
-        'purchase_date'
+        'purchase_date',
+        'expired_at',
+        'status',
+        'approved_by'
     ];
 
     public function product()
@@ -24,5 +27,10 @@ class StockPurchase extends Model
     public function supplier()
     {
         return $this->belongsTo(Supplier::class);
+    }
+
+    public function branch()
+    {
+        return $this->belongsTo(Branches::class);
     }
 }
