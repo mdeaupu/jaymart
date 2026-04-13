@@ -15,7 +15,7 @@ class StockPurchaseCreate extends Component
 {
     use WithFileUploads;
 
-    public $supplier_id, $product_id, $quantity, $total_price, $purchase_date, $invoice_number, $invoice_file;
+    public $supplier_id, $product_id, $quantity, $total_price, $purchase_date, $invoice_number, $invoice_file, $expired_at;
 
     public function submit()
     {
@@ -40,27 +40,13 @@ class StockPurchaseCreate extends Component
                 'total_price' => $this->total_price,
                 'invoice_number' => $this->invoice_number,
                 'purchase_date' => $this->purchase_date,
+                'expired_at' => $this->expired_at,
                 'status' => 'pending',
             ]);
 
             if ($this->invoice_file) {
                 $purchase->addMedia($this->invoice_file)->toMediaCollection('invoices');
             }
-
-            $stock = Stocks::firstOrCreate(
-                ['branch_id' => $branch_id, 'product_id' => $this->product_id],
-                ['quantity' => 0]
-            );
-            $stock->increment('quantity', $this->quantity);
-
-            StockLogs::create([
-                'branch_id' => $branch_id,
-                'product_id' => $this->product_id,
-                'user_id' => auth()->id(),
-                'type' => 'in',
-                'amount' => $this->quantity,
-                'reason' => "Pembelian dari Supplier (Inv: {$this->invoice_number})",
-            ]);
         });
 
         session()->flash('message', 'Pembelian berhasil dicatat dan stok telah diperbarui.');

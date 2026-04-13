@@ -52,6 +52,11 @@
                                 class="inline-flex items-center px-3 py-1.5 bg-indigo-50 text-indigo-700 rounded-lg text-sm font-semibold hover:bg-indigo-100 hover:text-indigo-800 transition-colors duration-200">
                                 Setujui
                             </button>
+                            <button wire:click="rejectAdjustment({{ $adj->id }})"
+                                wire:confirm="Tolak permintaan penyesuaian stok ini?"
+                                class="inline-flex items-center px-3 py-1.5 bg-red-50 text-red-700 rounded-lg text-sm font-semibold hover:bg-red-100 hover:text-red-800 transition-colors duration-200">
+                                Tolak
+                            </button>
                         </td>
                     </tr>
                 @empty
