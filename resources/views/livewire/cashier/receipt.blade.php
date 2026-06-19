@@ -1,71 +1,74 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Struk Jaymart</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body onload="window.print()" style="font-family: monospace; width: 300px; font-size:12px;">
+<body class="font-mono text-black mx-auto bg-white p-4" style="width: 300px; font-size: 12px; line-height: 1.4;">
 
-    <!-- HEADER -->
-    <div style="text-align:center;">
-        <strong style="font-size:16px;">JAYMART</strong><br>
-        Minimarket Modern<br>
-        ------------------------------
+    <div class="text-center mb-4">
+        <h1 class="text-lg font-black tracking-widest uppercase">JAYMART</h1>
+        <p class="text-xs font-bold border-b border-dashed border-black pb-2 mt-1">
+            Minimarket Modern
+        </p>
     </div>
 
-    <!-- INFO TRANSAKSI -->
-    <div style="margin-top:5px;">
-        No: {{ $transaction->invoice_number }}<br>
-        Tgl: {{ $transaction->created_at->format('d-m-Y H:i') }}<br>
-        Kasir: {{ $transaction->user->name ?? '-' }}
-    </div>
-
-    <hr>
-
-    <!-- LIST PRODUK -->
-    @foreach($transaction->details as $item)
-        <div>
-            {{ $item->product->name }}
+    <div class="text-xs font-semibold mb-3">
+        <div class="flex justify-between">
+            <span>No:</span>
+            <span>{{ $transaction->invoice_number }}</span>
         </div>
-
-        <div style="display:flex; justify-content:space-between;">
-            <span>
-                {{ $item->qty }} x {{ number_format($item->price_at_transaction,0,',','.') }}
-            </span>
-            <span>
-                {{ number_format($item->qty * $item->price_at_transaction,0,',','.') }}
-            </span>
+        <div class="flex justify-between">
+            <span>Tgl:</span>
+            <span>{{ $transaction->created_at->format('d-m-Y H:i') }}</span>
         </div>
-    @endforeach
-
-    <hr>
-
-    <!-- TOTAL -->
-    <div style="display:flex; justify-content:space-between;">
-        <strong>Total</strong>
-        <strong>Rp {{ number_format($transaction->total_price,0,',','.') }}</strong>
+        <div class="flex justify-between">
+            <span>Kasir:</span>
+            <span>{{ $transaction->user->name ?? '-' }}</span>
+        </div>
     </div>
 
-    <!-- OPSIONAL (kalau nanti kamu tambah fitur bayar) -->
+    <div class="border-t border-dashed border-black my-2"></div>
+
+    <div class="space-y-2 my-3 font-semibold">
+        @foreach($transaction->details as $item)
+            <div>
+                <div class="block truncate">{{ $item->product->name }}</div>
+                <div class="flex justify-between items-center text-xs mt-0.5">
+                    <span>{{ $item->qty }} x {{ number_format($item->price_at_transaction, 0, ',', '.') }}</span>
+                    <span>{{ number_format($item->qty * $item->price_at_transaction, 0, ',', '.') }}</span>
+                </div>
+            </div>
+        @endforeach
+    </div>
+
+    <div class="border-t border-dashed border-black my-2"></div>
+
+    <div class="flex justify-between items-center text-sm font-black my-2">
+        <span>TOTAL</span>
+        <span>Rp {{ number_format($transaction->total_price, 0, ',', '.') }}</span>
+    </div>
+
     @if(isset($transaction->paid_amount))
-        <div style="display:flex; justify-content:space-between;">
-            Bayar
-            <span>Rp {{ number_format($transaction->paid_amount,0,',','.') }}</span>
+        <div class="flex justify-between text-xs font-semibold mt-1">
+            <span>Bayar</span>
+            <span>Rp {{ number_format($transaction->paid_amount, 0, ',', '.') }}</span>
         </div>
-
-        <div style="display:flex; justify-content:space-between;">
-            Kembali
-            <span>Rp {{ number_format($transaction->change_amount,0,',','.') }}</span>
+        <div class="flex justify-between text-xs font-semibold mt-1">
+            <span>Kembali</span>
+            <span>Rp {{ number_format($transaction->change_amount, 0, ',', '.') }}</span>
         </div>
     @endif
 
-    <hr>
+    <div class="border-t border-dashed border-black my-2"></div>
 
-    <!-- FOOTER -->
-    <div style="text-align:center; margin-top:5px;">
-        Terima Kasih<br>
-        Selamat Berbelanja Kembali
+    <div class="text-center mt-4 text-xs font-bold">
+        <p>Terima Kasih</p>
+        <p>Selamat Berbelanja Kembali</p>
     </div>
 
 </body>
+
 </html>
