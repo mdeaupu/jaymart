@@ -1,80 +1,87 @@
-<x-slot name="header">
-    <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">
-        {{ __('Riwayat Pengajuan Stok') }}
-    </h2>
-</x-slot>
+<div class="py-6 lg:py-10 mx-auto px-4 sm:px-6 lg:px-8 bg-zinc-50 min-h-screen font-sans">
 
-<div class="py-10 mx-auto sm:px-6 lg:px-8">
-    <div class="mb-2 py-2">
-        <div class="h-11 flex items-center">
-            <p class="text-sm text-gray-800 dark:text-gray-400">Daftar seluruh pengajuan koreksi stok manual beserta status persetujuannya.</p>
+    {{-- EXECUTIVE HEADER --}}
+    <div
+        class="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-6 mb-8 border-b border-zinc-200 pb-6">
+        <div>
+            <div class="flex items-center gap-2">
+                <span
+                    class="px-2.5 py-0.5 bg-blue-100 text-blue-800 text-xs font-extrabold rounded-md uppercase tracking-wider">Activity
+                    Log</span>
+            </div>
+            <h1 class="text-3xl font-black text-zinc-900 tracking-tight mt-1">Riwayat Pengajuan & Opname</h1>
+            <p class="text-sm text-zinc-500 mt-1">Pantau status persetujuan perubahan stok yang telah diajukan.</p>
         </div>
     </div>
 
-    <x-card>
-        <div class="p-6">
-            <x-table>
-                <x-slot name="header">
-                    <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider text-left">Produk</th>
-                    <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider text-center">Perubahan</th>
-                    <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider text-left">Alasan / Catatan</th>
-                    <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider text-center">Status</th>
-                </x-slot>
-
-                @forelse($histories as $item)
-                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-all duration-200">
-                        <td class="px-6 py-5">
-                            <div class="text-sm font-bold text-gray-900 dark:text-white">{{ $item->product->name }}</div>
-                        </td>
-                        <td class="px-6 py-5 text-center">
-                            @if($item->adjustment_amount > 0)
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-green-50 text-green-700 dark:bg-green-900/30 dark:text-green-400 border border-green-200 dark:border-green-800">
-                                    +{{ $item->adjustment_amount }}
-                                </span>
-                            @else
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-red-50 text-red-700 dark:bg-red-900/30 dark:text-red-400 border border-red-200 dark:border-red-800">
-                                    {{ $item->adjustment_amount }}
-                                </span>
-                            @endif
-                        </td>
-                        <td class="px-6 py-5">
-                            <div class="text-sm text-gray-600 dark:text-gray-400 italic font-medium">
-                                "{{ $item->reason }}"
-                            </div>
-                        </td>
-                        <td class="px-6 py-5 text-center">
-                            @php
-                                $statusStyle = match($item->status) {
-                                    'pending' => 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400',
-                                    'approved' => 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400',
-                                    'rejected' => 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
-                                    default => 'bg-gray-100 text-gray-600'
-                                };
-                                $statusLabel = match($item->status) {
-                                    'pending' => 'Menunggu',
-                                    'approved' => 'Disetujui',
-                                    'rejected' => 'Ditolak',
-                                    default => $item->status
-                                };
-                            @endphp
-                            <span class="inline-flex px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-widest {{ $statusStyle }}">
-                                {{ $statusLabel }}
-                            </span>
-                        </td>
-                    </tr>
-                    @empty
+    <div class="bg-white rounded-2xl border border-zinc-200 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+                <thead class="bg-zinc-100 text-zinc-600 uppercase text-[10px] tracking-wider font-bold">
                     <tr>
-                        <td colspan="5" class="px-6 py-12 text-center text-gray-500 italic">
-                            Belum ada riwayat perubahan barang.
-                        </td>
+                        <th class="px-6 py-4">Tanggal & Pelapor</th>
+                        <th class="px-6 py-4">Produk Terkait</th>
+                        <th class="px-6 py-4 text-center">Perubahan Kuantitas</th>
+                        <th class="px-6 py-4">Alasan / Catatan</th>
+                        <th class="px-6 py-4 text-center">Status</th>
                     </tr>
-                @endforelse
-            </x-table>
+                </thead>
+                <tbody class="divide-y divide-zinc-100">
+                    @forelse($histories as $item)
+                        @php
+                            $statusStyle = match ($item->status) {
+                                'pending' => 'bg-zinc-100 text-zinc-600',
+                                're_audit' => 'bg-rose-100 text-rose-800',
+                                'escalated_to_manager' => 'bg-blue-100 text-blue-800',
+                                'escalated_to_owner' => 'bg-amber-100 text-amber-800',
+                                'approved' => 'bg-emerald-100 text-emerald-800',
+                                'rejected' => 'bg-red-100 text-red-800',
+                                default => 'bg-zinc-100 text-zinc-600'
+                            };
+
+                            $statusLabel = match ($item->status) {
+                                'pending' => 'Menunggu SPV',
+                                're_audit' => 'Hitung Ulang',
+                                'escalated_to_manager' => 'Cek Manager',
+                                'escalated_to_owner' => 'Otorisasi Owner',
+                                'approved' => 'Disetujui',
+                                'rejected' => 'Ditolak',
+                                default => $item->status
+                            };
+                        @endphp
+                        <tr class="hover:bg-zinc-50 transition-colors">
+                            <td class="px-6 py-4">
+                                <div class="font-black text-zinc-900">{{ $item->created_at->format('d M Y H:i') }}</div>
+                                <div class="text-[10px] font-bold text-zinc-400 mt-0.5 uppercase tracking-wider">Oleh:
+                                    {{ $item->user->name ?? '-' }}</div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="font-black text-zinc-800">{{ $item->product->name ?? 'Produk Terhapus' }}</div>
+                            </td>
+                            <td class="px-6 py-4 text-center font-mono">
+                                <span class="text-zinc-400">{{ $item->old_quantity }}</span>
+                                <span class="text-zinc-300 mx-1">➔</span>
+                                <span
+                                    class="font-black text-purple-700 bg-purple-50 px-2 py-0.5 rounded">{{ $item->new_quantity }}</span>
+                            </td>
+                            <td class="px-6 py-4 text-xs font-medium text-zinc-600 max-w-xs break-words">
+                                {{ $item->reason }}
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                <span
+                                    class="inline-flex px-2.5 py-1 rounded-md text-[10px] font-black uppercase tracking-wider {{ $statusStyle }}">
+                                    {{ $statusLabel }}
+                                </span>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="px-6 py-12 text-center text-zinc-400 font-medium italic">Belum ada
+                                riwayat penyesuaian barang di cabang ini.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
-        @if($histories->hasPages())
-            <div class="px-6 py-4 border-t border-gray-100 dark:border-gray-700">
-                {{ $histories->links() }}
-            </div>
-        @endif
-    </x-card>
+    </div>
 </div>

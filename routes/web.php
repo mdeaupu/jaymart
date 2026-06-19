@@ -6,23 +6,29 @@ use App\Livewire\Manager\FinancialSummary;
 use App\Livewire\Manager\StaffManagement;
 use App\Livewire\Manager\StockAdjustmentCreate;
 use App\Livewire\Manager\StockAdjustmentHistory;
+use App\Livewire\Manager\StockAdjustmentReview;
 use App\Livewire\Manager\StockPurchaseCreate;
 use App\Livewire\Manager\StockPurchaseHistory;
+use App\Livewire\Manager\VerifyEscalatedCorrection;
 use App\Livewire\Owner\BranchManagement;
 use App\Livewire\Owner\Dashboard as OwnerDashboard;
-use App\Livewire\Owner\Dashboard as SupervisorDashboard;
+use App\Livewire\Supervisor\Dashboard as SupervisorDashboard;
 use App\Livewire\Owner\MainTransactionReport;
 use App\Livewire\Owner\StockApproval;
 use App\Livewire\Owner\StockAudit;
 use App\Livewire\Owner\StockMonitor;
 use App\Livewire\Owner\UserManagement;
 use App\Livewire\Owner\StockAdjustmentIndex;
+use App\Livewire\Supervisor\AdjustmentHistory;
 use App\Livewire\Supervisor\RealtimeMonitoring;
+use App\Livewire\Supervisor\VerifyCashierCorrection;
+use App\Livewire\Supervisor\VerifyOpname;
 use App\Livewire\Supervisor\VoidApproval;
 use App\Livewire\Supervisor\StockAdjustmentApproval;
 use App\Livewire\Supervisor\AuditTrail;
 use App\Livewire\Cashier\Dashboard as CashierDashboard;
 use App\Livewire\Cashier\Pos;
+use App\Livewire\Warehouse\StockReceipt;
 use App\Models\Transactions;
 use App\Livewire\Cashier\Report;
 
@@ -76,8 +82,10 @@ Route::middleware(['auth', 'verified', 'role:manager'])
         Route::get('/finance', FinancialSummary::class)->name('finance');
         Route::get('/stockadjustmentcreate', StockAdjustmentCreate::class)->name('stockadjustmentcreate');
         Route::get('/stockadjustmenthistory', StockAdjustmentHistory::class)->name('stockadjustmenthistory');
+        Route::get('/stockadjustmentreview', StockAdjustmentReview::class)->name('stockadjustmentreview');
         Route::get('/stockpurchase', StockPurchaseCreate::class)->name('stockpurchase');
         Route::get('/stockpurchasehistory', StockPurchaseHistory::class)->name('stockpurchasehistory');
+        Route::get('/verify-cashier-void', VerifyEscalatedCorrection::class)->name('verify-void');
         Route::view('/profile', 'profile')->name('profile');
     });
 
@@ -86,11 +94,11 @@ Route::middleware(['auth', 'verified', 'role:supervisor'])
     ->name('supervisor.')
     ->group(function () {
         Route::get('/dashboard', SupervisorDashboard::class)->name('dashboard');
-        Route::get('/monitoring', RealtimeMonitoring::class)
-            ->name('monitoring');
-        Route::get('/void-approval', VoidApproval::class)->name('void');
-        Route::get('/stock-adjustment-approval', StockAdjustmentApproval::class)->name('stock');
+        Route::get('/monitoring', RealtimeMonitoring::class)->name('monitoring');
+        Route::get('/verify-opname', VerifyOpname::class)->name('verify-opname');
+        Route::get('/opname-history', AdjustmentHistory::class)->name('opname-history');
         Route::get('/audit-trail', AuditTrail::class)->name('audit');
+        Route::get('/verify-cashier-void', VerifyCashierCorrection::class)->name('verify-void');
     });
 
 
@@ -114,7 +122,7 @@ Route::middleware(['auth', 'verified', 'role:warehouse'])
     ->name('warehouse.')
     ->group(function () {
         Route::get('/dashboard', WarehosueDashboard::class)->name('dashboard');
-        Route::get('/incoming', IncomingGoods::class)->name('incoming');
+        Route::get('/incoming', StockReceipt::class)->name('incoming');
         Route::get('/opname', BlindOpname::class)->name('opname');
         Route::get('/damaged', DamagedExpired::class)->name('damaged');
     });

@@ -13,14 +13,15 @@ return new class extends Migration {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('branch_id')->constrained();
-
-            $table->foreignId('user_id')
-                ->nullable()
-                ->constrained('users')
-                ->onDelete('set null');
-
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
             $table->string('invoice_number')->unique();
             $table->decimal('total_price', 15, 2);
+            $table->string('shift');
+
+            $table->string('status_verifikasi')->default('pending');
+            $table->decimal('uang_fisik', 15, 2)->nullable();
+            $table->text('catatan_manajer')->nullable();
+
             $table->timestamps();
         });
     }

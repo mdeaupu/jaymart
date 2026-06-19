@@ -24,7 +24,7 @@ return new class extends Migration {
             $table->integer('new_quantity');
             $table->integer('adjustment_amount');
             $table->string('reason');
-            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
+            $table->enum('status', ['pending', 're_audit', 'escalated_to_manager', 'escalated_to_owner', 'approved', 'rejected'])->default('pending');
 
             $table->foreignId('approved_by')
                 ->nullable()

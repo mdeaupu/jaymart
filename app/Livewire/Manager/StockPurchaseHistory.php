@@ -13,7 +13,8 @@ class StockPurchaseHistory extends Component
     public function render()
     {
         return view('livewire.manager.stock-purchase-history', [
-            'purchases' => StockPurchase::with(['product', 'supplier'])
+            // Mengubah eager loading dari 'product' menjadi 'details.product'
+            'purchases' => StockPurchase::with(['details.product', 'supplier'])
                 ->where('user_id', auth()->id())
                 ->latest()
                 ->paginate(10)

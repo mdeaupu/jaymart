@@ -12,11 +12,15 @@ class StockAdjustmentHistory extends Component
 
     public function render()
     {
+        $user = auth()->user();
+
+        $histories = StockAdjustments::with(['product', 'user', 'approver'])
+            ->where('branch_id', $user->branch_id)
+            ->latest()
+            ->paginate(10);
+
         return view('livewire.manager.stock-adjustment-history', [
-            'histories' => StockAdjustments::with(['product'])
-                ->where('user_id', auth()->id())
-                ->latest()
-                ->paginate(10)
+            'histories' => $histories
         ])->layout('layouts.app');
     }
 }

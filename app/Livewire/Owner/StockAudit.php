@@ -2,46 +2,57 @@
 
 namespace App\Livewire\Owner;
 
-use App\Models\StockLogs;
+use App\Models\AuditLog;
+use App\Models\Branches;
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\ApprovalRequest;
-use App\Models\Stock;
 
 class StockAudit extends Component
 {
     use WithPagination;
-    public $product_id;
-    public $real_stock;
+
+    // Properti Filter Dinamis
+    public $search = '';
+    public $filterBranch = '';
+    public $filterAction = '';
+
+    // Reset halaman pagination jika filter berubah
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+    public function updatingFilterBranch()
+    {
+        $this->resetPage();
+    }
+    public function updatingFilterAction()
+    {
+        $this->resetPage();
+    }
 
     public function render()
     {
-        return view('livewire.owner.stock-audit', [
-            'logs' => StockLogs::with(['product', 'branch', 'user'])
-                ->latest()
-                ->paginate(11)
-        ])->layout('layouts.app');
-        ;
-    }
+        // Mengambil data log audit dengan filter spesifik owner
+        $logs = AuditLog::with(['branch', 'user'])
+            ->when($this->filterBranch, function ($query) {
+                $query->where('branch_id', $this->filterBranch);
+            })
+            ->when($this->filterAction, function ($query) {
+                $query->where('action', $this->filterAction);
+            })
+            ->when($this->search, function ($query) {
+                $query->where('description', 'like', '%' . $this->search . '%');
+            })
+            ->latest()
+            ->paginate(15);
 
-    public function submitAudit()
-    {
-        $stock = Stock::where('product_id', $this->product_id)->first();
+        // Mengambil daftar cabang untuk dropdown filter
+        $branches = Branches::all();
 
-        if (!$stock) return;
+        // Ambil tipe aksi unik yang terdaftar di DB untuk opsi filter
+        $availableActions = AuditLog::select('action')->distinct()->pluck('action');
 
-        // kirim ke approval, BUKAN update langsung
-        ApprovalRequest::create([
-            'type' => 'adjustment',
-            'status' => 'pending',
-            'requested_by' => auth()->id(),
-            'data' => json_encode([
-                'product_id' => $this->product_id,
-                'old_stock' => $stock->jumlah,
-                'real_stock' => $this->real_stock
-            ])
-        ]);
-
-        session()->flash('message', 'Pengajuan stock berhasil, menunggu approval');
+        return view('livewire.owner.stock-audit', compact('logs', 'branches', 'availableActions'))
+            ->layout('layouts.app');
     }
 }

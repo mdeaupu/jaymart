@@ -1,82 +1,107 @@
-<x-slot name="header">
-    <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">
-        {{ __('Blind Stock Opname') }}
-    </h2>
-</x-slot>
+<div class="py-6 lg:py-10 mx-auto px-4 sm:px-6 lg:px-8 bg-zinc-50 min-h-screen font-sans">
 
-<div class="py-10 mx-auto sm:px-6 lg:px-8">
-    <div class="max-w-5xl mx-auto">
-        <x-card class="p-8 border-t-4 border-amber-500">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-                <div>
-                    <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200">Blind Stock Opname</h2>
-                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Hitung fisik barang di gudang dan masukkan
-                        jumlahnya di bawah ini.</p>
-                </div>
-                <div
-                    class="inline-flex items-center px-3 py-1 bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 rounded-full text-[10px] font-bold uppercase tracking-wider border border-amber-200 dark:border-amber-800">
-                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04kM12 21.355r" />
-                    </svg>
-                    Inventory Integrity Mode
-                </div>
+    {{-- EXECUTIVE HEADER --}}
+    <div class="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-6 mb-8 border-b border-zinc-200 pb-6">
+        <div>
+            <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 bg-blue-100 text-blue-800 text-xs font-extrabold rounded-md uppercase tracking-wider">Staff Gudang Panel</span>
             </div>
-
-            <form wire:submit.prevent="submit">
-                <div class="overflow-hidden border border-gray-100 dark:border-gray-700 rounded-lg">
-                    <table class="w-full text-sm text-left">
-                        <thead class="bg-gray-50 dark:bg-gray-800/50 text-gray-800 dark:text-gray-400">
-                            <tr>
-                                <th class="px-6 py-4 font-semibold uppercase text-xs tracking-wider">Nama Produk</th>
-                                <th class="px-6 py-4 font-semibold uppercase text-xs tracking-wider w-64 text-center">
-                                    Jumlah Fisik Terhitung</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
-                            @forelse($stocks as $stock)
-                                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
-                                    <td class="px-6 py-4">
-                                        <div class="font-bold text-gray-900 dark:text-gray-100">{{ $stock->product->name }}
-                                        </div>
-                                        <div class="text-[10px] text-gray-500 uppercase mt-0.5">SKU:
-                                            {{ $stock->product->sku ?? '-' }}
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <div class="flex items-center justify-center">
-                                            <x-text-input wire:model="counts.{{ $stock->id }}" type="number"
-                                                class="block w-32 text-center font-bold focus:ring-amber-500 focus:border-amber-500"
-                                                placeholder="0" />
-                                            <span
-                                                class="ml-3 text-gray-400 dark:text-gray-500 text-[10px] font-bold uppercase">Unit</span>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="2" class="px-6 py-12 text-center text-gray-500 dark:text-gray-400 italic">
-                                        Belum ada stok barang di cabang ini.
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-
-                @if($stocks->isNotEmpty())
-                    <div
-                        class="mt-8 flex flex-col md:flex-row items-center justify-end gap-4 border-t border-gray-100 dark:border-gray-700 pt-8">
-                        <p class="text-[11px] text-gray-500 dark:text-gray-400 italic text-center md:text-right">
-                            *Selisih akan otomatis diajukan ke Manager untuk sistem approval.
-                        </p>
-                        <x-primary-button onclick="return confirm('Apakah Anda yakin data hitungan sudah benar?')"
-                            class="w-full md:w-auto justify-center bg-indigo-600 hover:bg-indigo-700 py-3 px-6 text-xs uppercase tracking-[0.2em]">
-                            Kirim Hasil Opname
-                        </x-primary-button>
-                    </div>
-                @endif
-            </form>
-        </x-card>
+            <h1 class="text-3xl font-black text-zinc-900 tracking-tight mt-1">Formulir Blind Stock Opname</h1>
+            <p class="text-sm text-zinc-500 mt-1">Lakukan penghitungan fisik nyata tanpa melihat data sistem.</p>
+        </div>
     </div>
+
+    <div class="fixed top-5 right-5 z-[9999] max-w-sm space-y-3">
+        @if(session()->has('message') || session()->has('success'))
+            <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)"
+                class="flex items-center p-4 bg-emerald-600 text-white rounded-2xl shadow-xl border border-emerald-500 transform transition-all duration-300"
+                x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-[-20px]" x-transition:enter-end="opacity-100 translate-y-0"
+                x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-90">
+                <div class="mr-3 bg-emerald-700/50 p-2 rounded-xl">✨</div>
+                <div class="flex-1">
+                    <h4 class="font-black text-sm">Berhasil!</h4>
+                    <p class="text-xs text-emerald-100 mt-0.5 font-medium">{{ session('message') ?? session('success') }}</p>
+                </div>
+                <button @click="show = false" class="ml-4 text-emerald-200 hover:text-white transition font-bold">✕</button>
+            </div>
+        @endif
+
+        @if(session()->has('error'))
+            <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 6000)"
+                class="flex items-center p-4 bg-rose-600 text-white rounded-2xl shadow-xl border border-rose-500 transform transition-all duration-300"
+                x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-[-20px]" x-transition:enter-end="opacity-100 translate-y-0"
+                x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-90">
+                <div class="mr-3 bg-rose-700/50 p-2 rounded-xl">❌</div>
+                <div class="flex-1">
+                    <h4 class="font-black text-sm">Peringatan Sistem!</h4>
+                    <p class="text-xs text-rose-100 mt-0.5 font-medium">{{ session('error') }}</p>
+                </div>
+                <button @click="show = false" class="ml-4 text-rose-200 hover:text-white transition font-bold">✕</button>
+            </div>
+        @endif
+    </div>
+    @php
+        $reAuditLists = \App\Models\StockAdjustments::with('product')
+            ->where('branch_id', auth()->user()->branch_id)
+            ->where('status', 're_audit')
+            ->get();
+    @endphp
+
+    @if($reAuditLists->isNotEmpty())
+        <div class="mb-6 p-5 bg-rose-50 border-l-4 border-rose-500 rounded-r-2xl shadow-sm text-sm">
+            <strong class="font-black text-rose-700 flex items-center mb-2 uppercase tracking-wider">🔄 Perintah Hitung Ulang (Re-Audit) Supervisor:</strong>
+            <ul class="list-disc list-inside space-y-1.5 text-rose-600 font-medium text-xs">
+                @foreach($reAuditLists as $ra)
+                    <li>Barang <span class="font-bold text-rose-900">{{ $ra->product->name }}</span>: <span class="italic">"{{ $ra->reason }}"</span></li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <form wire:submit.prevent="submit">
+        <div class="bg-white rounded-2xl border border-zinc-200 shadow-sm overflow-hidden">
+            <div class="px-5 py-4 border-b border-zinc-100 bg-zinc-900 text-white">
+                <h2 class="font-extrabold text-sm uppercase tracking-wider">Daftar Produk Cabang</h2>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm">
+                    <thead class="bg-zinc-100 text-zinc-600 uppercase text-[10px] tracking-wider font-bold">
+                        <tr>
+                            <th class="px-6 py-4">Nama Produk / SKU</th>
+                            <th class="px-6 py-4 text-center w-1/3">Jumlah Fisik Nyata</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-zinc-100">
+                        @forelse($stocks as $stock)
+                            <tr class="hover:bg-zinc-50 transition-colors">
+                                <td class="px-6 py-4">
+                                    <div class="font-bold text-zinc-900">{{ $stock->product->name }}</div>
+                                    <div class="text-[10px] text-zinc-500 font-bold uppercase tracking-wider mt-0.5">SKU: {{ $stock->product->sku }}</div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center justify-center">
+                                        <input type="number" wire:model="counts.{{ $stock->id }}" min="0" placeholder="Belum dihitung"
+                                            class="w-full max-w-[180px] px-4 py-2.5 bg-white border border-zinc-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition text-sm text-center font-black">
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="2" class="text-center py-12 text-zinc-400 text-sm font-medium">
+                                    Tidak ada produk terdaftar di cabang ini.
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+            <div class="px-6 py-5 bg-zinc-50 border-t border-zinc-100 flex justify-end">
+                <button type="submit" wire:loading.attr="disabled"
+                    class="px-6 py-3 bg-purple-600 text-white rounded-xl text-sm font-bold hover:bg-purple-700 shadow-sm transition disabled:opacity-50">
+                    Kirim Hasil Opname
+                </button>
+            </div>
+        </div>
+    </form>
 </div>

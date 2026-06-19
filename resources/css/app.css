@@ -1,3 +1,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+nav[role="navigation"] [aria-current="page"] > span,
+nav[role="navigation"] [aria-current="page"] > button {
+    background-color: #1f2937 !important;
+    color: #ffffff !important;
+    border-color: #1f2937 !important;
+}
+
+.dark nav[role="navigation"] [aria-current="page"] > span,
+.dark nav[role="navigation"] [aria-current="page"] > button {
+    background-color: #ffffff !important;
+    border-color: #ffffff !important;
+    color: #1f2937 !important;
+}
+
+.dark nav[role="navigation"] a,
+.dark nav[role="navigation"] button {
+    color: #d1d5db !important;
+}

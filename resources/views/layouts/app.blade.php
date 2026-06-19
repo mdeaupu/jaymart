@@ -47,26 +47,36 @@
 
 </head>
 
-<body class="font-sans antialiased">
-    <div class="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col">
+<body class="font-sans antialiased text-gray-900 dark:text-gray-100 bg-gray-100 dark:bg-gray-900">
+    {{-- LAYOUT FLEXBOX HUBUNGAN SIDEBAR DAN KONTEN UTAMA --}}
+    <div class="min-h-screen flex flex-col lg:flex-row">
+
+        {{-- Komponen Navigasi Sidebar Samping --}}
         <livewire:layout.navigation />
 
-        <!-- Page Heading -->
-        @if (isset($header))
-            <header class="bg-white dark:bg-gray-800 shadow">
-                <div class="mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    {{ $header }}
-                </div>
-            </header>
-        @endif
+        {{-- AREA KERJA UTAMA (KANAN): Menggeser konten sejauh w-64 pada layar besar desktop --}}
+        <div class="flex-1 flex flex-col min-w-0 lg:pl-64 pt-14 lg:pt-0">
 
-        <!-- Page Content -->
-        <main>
-            {{ $slot }}
-        </main>
+            <!-- Page Heading (Jika Ada) -->
+            @if (isset($header))
+                <header
+                    class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 sticky top-14 lg:top-0 z-20">
+                    <div class="py-4 px-4 sm:px-6 lg:px-8">
+                        {{ $header }}
+                    </div>
+                </header>
+            @endif
 
-        <x-footer></x-footer>
+            <!-- Page Content -->
+            <main class="flex-1 p-4 sm:p-6 lg:p-8">
+                {{ $slot }}
+            </main>
+
+            {{-- Footer Komponen --}}
+            <x-footer></x-footer>
+        </div>
     </div>
+
     @livewireScripts
 
 </body>

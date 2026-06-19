@@ -3,6 +3,7 @@
 namespace App\Livewire\Manager;
 
 use App\Models\User;
+use App\Models\AuditLog; // <--- PASTIKAN MODEL INI DIIMPORT
 use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
 use Spatie\Permission\Models\Role;
@@ -62,25 +63,36 @@ class StaffManagement extends Component
         $this->resetInputFields();
     }
 
-
-
     public function store()
     {
         $this->validate([
-            'name' => 'required',
+            'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $this->userId,
             'role' => 'required',
             'password' => $this->userId ? 'nullable|min:6' : 'required|min:6',
         ]);
 
+        $managerBranchId = auth()->user()->branch_id;
+
         $user = User::updateOrCreate(['id' => $this->userId], [
             'name' => $this->name,
             'email' => $this->email,
             'password' => $this->password ? Hash::make($this->password) : User::find($this->userId)->password,
-            'branch_id' => auth()->user()->branch_id,
+            'branch_id' => $managerBranchId,
         ]);
 
         $user->syncRoles([$this->role]);
+
+        // 📝 REKAM AUDIT LOG: AKTIVITAS MANAJEMEN PEGAWAI (CREATE/UPDATE)
+        $auditAction = $this->userId ? 'UPDATE' : 'CREATE';
+        $auditDesc = $this->userId ? "Manager mengupdate data profil/peran untuk karyawan bernama {$this->name}" : "Manager merekrut dan mendaftarkan karyawan baru bernama {$this->name} dengan tingkat otorisasi: " . strtoupper($this->role);
+
+        AuditLog::create([
+            'branch_id' => $managerBranchId,
+            'user_id' => auth()->id(),
+            'action' => $auditAction,
+            'description' => $auditDesc
+        ]);
 
         session()->flash('message', $this->userId ? 'Data Staff Berhasil Diperbarui.' : 'Staff Baru Berhasil Ditambahkan.');
 
@@ -115,7 +127,19 @@ class StaffManagement extends Component
                 return;
             }
 
+            $staffName = $user->name;
+            $managerBranchId = auth()->user()->branch_id;
+
             $user->delete();
+
+            // 📝 REKAM AUDIT LOG: PENGHAPUSAN AKUN PEGAWAI MALAPRAKTEK/RESIGN
+            AuditLog::create([
+                'branch_id' => $managerBranchId,
+                'user_id' => auth()->id(),
+                'action' => 'DELETE',
+                'description' => "Manager menghapus/menonaktifkan akun karyawan atas nama {$staffName} secara permanen."
+            ]);
+
             $this->userId = null;
             $this->confirmingStaffDeletion = false;
             session()->flash('message', 'Data Staff Berhasil Dihapus.');
