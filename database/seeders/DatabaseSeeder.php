@@ -21,10 +21,10 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             UserSeeder::class,
             StockSeeder::class,
-            TransactionSeeder::class,
-            StockLogSeeder::class,
-            StockAdjustmentSeeder::class,
-            VoidApprovalSeeder::class,
+                // TransactionSeeder::class,
+                // StockLogSeeder::class,
+                // StockAdjustmentSeeder::class,
+                // VoidApprovalSeeder::class,
             SupplierSeeder::class
         ]);
     }
