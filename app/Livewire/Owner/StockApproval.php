@@ -2,9 +2,7 @@
 
 namespace App\Livewire\Owner;
 
-use App\Models\StockLogs;
 use App\Models\StockPurchase;
-use App\Models\Stocks;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -12,6 +10,10 @@ use Livewire\WithPagination;
 class StockApproval extends Component
 {
     use WithPagination;
+
+    // Properti baru untuk menyimpan data nota yang sedang di-review/dilihat
+    public $selectedPurchase = null;
+    public $showDetailModal = false;
 
     public function approvePurchase($id)
     {
@@ -22,24 +24,14 @@ class StockApproval extends Component
                 'status' => 'approved',
                 'approved_by' => auth()->id(),
             ]);
-
-            $stock = Stocks::firstOrCreate(
-                ['branch_id' => $purchase->branch_id, 'product_id' => $purchase->product_id],
-                ['quantity' => 0]
-            );
-            $stock->increment('quantity', $purchase->quantity);
-
-            StockLogs::create([
-                'branch_id' => $purchase->branch_id,
-                'product_id' => $purchase->product_id,
-                'user_id' => $purchase->user_id,
-                'type' => 'in',
-                'amount' => $purchase->quantity,
-                'reason' => "Pembelian Disetujui (Inv: {$purchase->invoice_number})",
-            ]);
         });
 
-        session()->flash('message', 'Pembelian stok berhasil disetujui.');
+        // Jika modal sedang terbuka untuk item ini, tutup modal
+        if ($this->selectedPurchase && $this->selectedPurchase->id == $id) {
+            $this->closeDetailModal();
+        }
+
+        session()->flash('message', 'Pembelian stok berhasil disetujui. Status diperbarui, menunggu verifikasi fisik oleh Warehouse.');
     }
 
     public function rejectPurchase($id)
@@ -50,13 +42,33 @@ class StockApproval extends Component
             'approved_by' => auth()->id(),
         ]);
 
+        if ($this->selectedPurchase && $this->selectedPurchase->id == $id) {
+            $this->closeDetailModal();
+        }
+
         session()->flash('message', 'Pembelian stok telah ditolak.');
+    }
+
+    // Fungsi baru untuk memuat detail nota ke dalam modal
+    public function viewDetail($id)
+    {
+        // Muat data beserta relasi lengkapnya
+        $this->selectedPurchase = StockPurchase::with(['details.product', 'supplier', 'branch', 'user'])
+            ->findOrFail($id);
+        $this->showDetailModal = true;
+    }
+
+    // Fungsi untuk menutup modal
+    public function closeDetailModal()
+    {
+        $this->showDetailModal = false;
+        $this->selectedPurchase = null;
     }
 
     public function render()
     {
         return view('livewire.owner.stock-approval', [
-            'purchases' => StockPurchase::with(['product', 'supplier', 'branch'])
+            'purchases' => StockPurchase::with(['details.product', 'supplier', 'branch'])
                 ->where('status', 'pending')
                 ->latest()
                 ->paginate(10),
